@@ -17,18 +17,18 @@ def nse(predictions, targets):
             
 # df_loc = "../exutorios_catch/out/"
 df_loc = "../catch/out/"
-df_loc = "../exutorios_catch/out/"
-sim =  pd.read_csv(f'{df_loc}/chanqWin.tss',skiprows=3)
+# df_loc = "../exutorios_catch/out/"
+sim =  pd.read_csv(f'{df_loc}chanqWin.tss',skiprows=3)
 
 lista = []
-# for i in sim["1"]:
-#     valor = i.split()[1]
-#     lista.append(float(valor))
+for i in sim["1"]:
+    valor = i.split()[1]
+    lista.append(float(valor))
 data = pd.date_range(start="2013-01-03 00:00:00",end = "2023-04-09 00:00:00",freq = "D" )
 df = pd.DataFrame(index = data)
-# df["ls_dis"] = lista
-temp = pd.read_csv("/discolocal/felipe/lisflood_pm/vazoes_observadas/results/1_9/ultimo_vazao.csv",index_col = 0)
-df["ls_dis"] = temp["vazao_25334953_Porto Amazonas"].values
+df["ls_dis"] = lista
+# temp = pd.read_csv("/discolocal/felipe/lisflood_pm/vazoes_observadas/results/1_9/ultimo_vazao.csv",index_col = 0)
+# df["ls_dis"] = temp["vazao_25334953_Porto Amazonas"].values
 # obs = pd.read_csv("/discolocal/felipe/Progamas/coleta_dados/coleta/mapas_tcc/vazao/vazao_25334953_Porto Amazonas.csv",index_col = 0,parse_dates=True)
 # obs.drop(columns = ["horqualidade"],inplace = True)
 obs = pd.read_csv("/discolocal/felipe/lisflood_pm/vazoes_observadas/vazao_25334953_Porto Amazonas.csv",index_col = 0,parse_dates=True)
@@ -45,7 +45,7 @@ fig.add_trace(go.Scatter(x = df.index , y = df.ls_dis,name = f"simulado nash: {n
 fig.add_trace(go.Scatter(x= df.index,y=df.horleitura,name = "obs", marker_color = "black"))
 
 pasta = f"../catch/out/novos_mapas/{data_hoje.day}_{data_hoje.month}"
-pasta = f"../exutorios_catch/out/novos_mapas/{data_hoje.day}_{data_hoje.month}"
+# pasta = f"../exutorios_catch/out/novos_mapas/{data_hoje.day}_{data_hoje.month}"
 
 if not os.path.exists(pasta):
     os.makedirs(pasta)
