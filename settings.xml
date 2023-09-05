@@ -64,7 +64,7 @@
     <setoption choice="0" name="repStateMaps" />
 
     # report end maps
-    <setoption choice="1" name="repEndMaps" />
+    <setoption choice="0" name="repEndMaps" />
 
     # report maps
     <setoption choice="1" name="repDischargeMaps" />

@@ -377,25 +377,25 @@ class Funcionalidades():
             self.arquivo_saida = ano_alvo
             self.plota_unico_file()
         self.comparando_multiplos_anos = False
-if __name__ == "__main__":
-    import xml.etree.ElementTree as ET
+# if __name__ == "__main__":
+    # import xml.etree.ElementTree as ET
     
-    caminho_arquivo = "/discolocal/felipe/lisflood_pm/compara_anos.xml"  # Substitua pelo caminho correto
+    # caminho_arquivo = "/discolocal/felipe/lisflood_pm/compara_anos.xml"  # Substitua pelo caminho correto
     
-    tree = ET.parse(caminho_arquivo)
-    root = tree.getroot()
+    # tree = ET.parse(caminho_arquivo)
+    # root = tree.getroot()
     
-    novo_ano = "2017"  # Ano correspondente
+    # novo_ano = "2017"  # Ano correspondente
     
-    for group_element in root.findall(".//group"):
-        for textvar_element in group_element.findall('textvar'):
-            var_nome = textvar_element.get('name')
-            if var_nome == "CalendarDayStart" or var_nome == "timestepInit" or var_nome == "StepStart":
-                textvar_element.set('value', novo_ano + "-01-01 00:00")
-            elif var_nome == "StepEnd":
-                if novo_ano == "2023":
-                    textvar_element.set('value', "2023-07-04 00:00")
-                else:
-                    textvar_element.set('value', novo_ano + "-12-31 00:00")
+    # for group_element in root.findall(".//group"):
+    #     for textvar_element in group_element.findall('textvar'):
+    #         var_nome = textvar_element.get('name')
+    #         if var_nome == "CalendarDayStart" or var_nome == "timestepInit" or var_nome == "StepStart":
+    #             textvar_element.set('value', novo_ano + "-01-01 00:00")
+    #         elif var_nome == "StepEnd":
+    #             if novo_ano == "2023":
+    #                 textvar_element.set('value', "2023-07-04 00:00")
+    #             else:
+    #                 textvar_element.set('value', novo_ano + "-12-31 00:00")
     
-    tree.write(caminho_arquivo)
+    # tree.write(caminho_arquivo)

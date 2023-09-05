@@ -1,0 +1,61 @@
+nome,nome arquivo,unidades,range,classe,descrição
+mask map,area.nc,-,none-1,mapas gerais,area
+grid cell comprimento,pixleng.nc,-,>0,mapas gerais,pixleng
+grid cell area,pixarea.nc,m²,>0,mapas gerais,pixarea
+local drain direction map,ldd.nc,-,"1,2,3,4,5,6,7,8,9",topografia,ec_ldd_x
+slope gradient map,gradient.nc,-,>0,topografia,gradient
+standard deviation of elevation map,elvstd.nc,-,>=0,topografia,elvstd
+flow accumulation area/ upstream area,upArea.nc,m²,>0,topografia,acc_metros
+Fraction of inland water,fracwater.nc,-,0-1,land use,fracwater
+Fraction of sealed surfaces,fracsealed.nc,-,0-1,land use,fracsealed
+Fraction of forest,fracforest.nc,-,0-1,land use,fracforest
+Fraction of irrigated crops,fracirrigated.nc,-,0-1,land use,fracirrigated
+Fraction of other land use type,fracother.nc,-,0-1,land use,fracother
+Crop coefficient,cropcoef_T.nc,-,"0,2 - 1,08",land_use_dependencias,cropcoef_f
+Crop coefficient,cropcoef_T.nc,-,"0,2 - 1,08",land_use_dependencias,cropcoef_i
+Crop coefficient,cropcoef_T.nc,-,"0,2 - 1,08",land_use_dependencias,cropcoef_o
+Crop group number,cropgrpn_T.nc,-,1 - 5,land_use_dependencias,cropgrpn_i
+Crop group number,cropgrpn_T.nc,-,1 - 5,land_use_dependencias,cropgrpn_o
+Crop group number,cropgrpn_T.nc,-,1 - 5,land_use_dependencias,cropgrpn_f
+Manning’s coefficient,mannings_T.nc,m^(1/3)*s^-1,"0,015 - 0,20",land_use_dependencias,mannings_f
+Manning’s coefficient,mannings_T.nc,m^(1/3)*s^-1,"0,015 - 0,20",land_use_dependencias,mannings_o
+Soil depth,soildeothN_T.nc,mm,>=50,soil depth,soildepth1_f
+Soil depth,soildeothN_T.nc,mm,>=50,soil depth,soildepth1_o
+Soil depth,soildeothN_T.nc,mm,>=50,soil depth,soildepth2_f
+Soil depth,soildeothN_T.nc,mm,>=50,soil depth,soildepth2_o
+Soil depth,soildeothN_T.nc,mm,>=50,soil depth,soildepth3_f
+Soil depth,soildeothN_T.nc,mm,>=50,soil depth,soildepth3_o
+Theta saturated,thetasN_T.nc,m³/m³,>0 & <1,soil hidraulic,thetas1_f
+Theta saturated,thetasN_T.nc,m³/m³,>0 & <1,soil hidraulic,thetas1_o
+Theta saturated,thetasN_T.nc,m³/m³,>0 & <1,soil hidraulic,thetas2_f
+Theta saturated,thetasN_T.nc,m³/m³,>0 & <1,soil hidraulic,thetas2_o
+Theta saturated,thetasN_T.nc,m³/m³,>0 & <1,soil hidraulic,thetas3
+lambda,lambdaN_T.nc,-,">0 & <=0,42",soil hidraulic,lambda1_f
+lambda,lambdaN_T.nc,-,">0 & <=0,42",soil hidraulic,lambda1_o
+lambda,lambdaN_T.nc,-,">0 & <=0,42",soil hidraulic,lambda2_f
+lambda,lambdaN_T.nc,-,">0 & <=0,42",soil hidraulic,lambda2_o
+lambda,lambdaN_T.nc,-,">0 & <=0,42",soil hidraulic,lambda3
+Genu Alpha,genuaN_T.nc,cm⁻1,">0 & <=0,055",soil hidraulic,genua1_f
+Genu Alpha,genuaN_T.nc,cm⁻1,">0 & <=0,055",soil hidraulic,genua1_o
+Genu Alpha,genuaN_T.nc,cm⁻1,">0 & <=0,055",soil hidraulic,genua2_f
+Genu Alpha,genuaN_T.nc,cm⁻1,">0 & <=0,055",soil hidraulic,genua2_o
+Genu Alpha,genuaN_T.nc,cm⁻1,">0 & <=0,055",soil hidraulic,genua3
+K saturated,ksatN_T.nc,mm/day,>0,soil hidraulic,ksat1_f
+K saturated,ksatN_T.nc,mm/day,>0,soil hidraulic,ksat1_o
+K saturated,ksatN_T.nc,mm/day,>0,soil hidraulic,ksat2_f
+K saturated,ksatN_T.nc,mm/day,>0,soil hidraulic,ksat2_o
+K saturated,ksatN_T.nc,mm/day,>0,soil hidraulic,ksat3
+Theta residual,thetarN_T.nc,m³/m³,>0 & <1,soil hidraulic,thetar1
+Theta residual,thetarN_T.nc,m³/m³,>0 & <1,soil hidraulic,thetar1_f
+Theta residual,thetarN_T.nc,m³/m³,>0 & <1,soil hidraulic,thetar1_o
+Theta residual,thetarN_T.nc,m³/m³,>0 & <1,soil hidraulic,thetar2
+Theta residual,thetarN_T.nc,m³/m³,>0 & <1,soil hidraulic,thetar2_f
+Theta residual,thetarN_T.nc,m³/m³,>0 & <1,soil hidraulic,thetar3
+Channel mask,chan.nc,-,none-1,geometria de canal,chan
+Side slope,chans.nc,m,0,geometria de canal,chans
+Channel length,chanlength.nc,m,0,geometria de canal,chanlength
+Channel gradient,changrad.nc,m/m,0-1,geometria de canal,changrad
+Manning’s roughness coefficient,ec_chanman.nc,m^(1/3)*s^-1,,geometria de canal,ec_chanman
+Bottom width,ec_chanbw.nc,m,>0,geometria de canal,ec_chanbw
+Floodplain,chanflpn.nc,m,>0,geometria de canal,ec_chanflpn
+Bankfull channel depth,ec_chanbnkf.nc,m,>0,geometria de canal,ec_chanbnkf
