@@ -78,22 +78,22 @@ class Funcionalidades():
             temp = df_esperado[colunas].values
             self.nomes_paramns["valores"]= temp
             print(self.nomes_paramns)
-            settings_file1 =  f"{self.SETTINGS_DIR}/compara_anos.xml"
-            settings_file2 = f"{self.SETTINGS_DIR}/settings.xml"
-            for settings_file in [settings_file1,settings_file2]:
+            # settings_file1 =  f"{self.SETTINGS_DIR}/compara_anos.xml"
+            settings_file = f"{self.SETTINGS_DIR}/settings.xml"
+            # for settings_file in [settings_file1,settings_file2]:
 
-                for variavel,nome  in zip( self.nomes_paramns.loc[self.nomes_paramns.tipo == "xml","valores"],self.nomes_paramns.loc[self.nomes_paramns.tipo == "xml","ParameterName"]) : 
-                    self.editar_valor_variavel(settings_file,2,nome,variavel)
-                
-                for variavel,nome  in zip( self.nomes_paramns.loc[self.nomes_paramns.tipo != "xml","valores"],self.nomes_paramns.loc[self.nomes_paramns.tipo != "xml","ParameterName"]) : 
-                
-                     tipo = self.nomes_paramns.loc[self.nomes_paramns["ParameterName"] ==nome,"ON_OFF"].values[0]
-                     if tipo == False:
-                         continue
-                     else:
-                         self.inicia(nome,tipo,variavel)
-                         # self.Open()
-                         self.manipular()
+            for variavel,nome  in zip( self.nomes_paramns.loc[self.nomes_paramns.tipo == "xml","valores"],self.nomes_paramns.loc[self.nomes_paramns.tipo == "xml","ParameterName"]) : 
+                self.editar_valor_variavel(settings_file,2,nome,variavel)
+            
+            for variavel,nome  in zip( self.nomes_paramns.loc[self.nomes_paramns.tipo != "xml","valores"],self.nomes_paramns.loc[self.nomes_paramns.tipo != "xml","ParameterName"]) : 
+            
+                 tipo = self.nomes_paramns.loc[self.nomes_paramns["ParameterName"] ==nome,"ON_OFF"].values[0]
+                 if tipo == False:
+                     continue
+                 else:
+                     self.inicia(nome,tipo,variavel)
+                     # self.Open()
+                     self.manipular()
 
     def reseta(self):
 

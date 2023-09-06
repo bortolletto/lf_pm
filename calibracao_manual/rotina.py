@@ -149,7 +149,8 @@ class rodando(Altera_Xml):
           # Passo 2
           I = np.arange(1, m+1, 1)
           Xbest = X0
-          Fbest = fobj(Xbest)
+          # Fbest = fobj(Xbest)
+          Fbest =  abs(1 - fobj(X0))
           # Passo 3
           for i in tqdm(I):
             
@@ -173,12 +174,18 @@ class rodando(Altera_Xml):
                       if Xnew[j] < Xmin[j]:
                           Xnew[j] = Xmax[j]
               # Passo 5
-              Fnew = fobj(Xnew)
+              # Fnew = fobj(Xnew)
+              # if Fnew <= Fbest:
+              #     Fbest = Fnew
+              #     Xbest = np.copy(Xnew)
+              #     print(Fbest)
+              #     df[Fbest] = Xbest
+              Fnew = abs(1 - fobj(Xnew))
               if Fnew <= Fbest:
                   Fbest = Fnew
                   Xbest = np.copy(Xnew)
                   print(Fbest)
-                  df[Fbest] = Xbest
+                  
                  
           # Fim
           return Xbest, Fbest ,df
@@ -257,7 +264,7 @@ class rodando(Altera_Xml):
             targets = self.df_merged["horleitura"]
             predictions = self.df_merged["ls_dis"]
             self.nome_grafico = "nash"
-            return (1-(np.sum((targets-predictions)**2)/np.sum((targets-np.mean(targets))**2)))
+            return (np.sum((targets-predictions)**2)/np.sum((targets-np.mean(targets))**2))
         
         elif kge == True:
             import hydroeval as he

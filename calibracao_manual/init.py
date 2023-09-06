@@ -116,7 +116,7 @@ if __name__ == "__main__":
     temp = Calibrador()
     temp.inicializar()
     temp.reseta_for_the_best()
-    temp.executa("novo_test",["table2map"],r = 0.02,m = 500)
+    temp.executa("novo_test",["table2map"],r = 0.02,m = 100)
     # temp.executar_um_por_ano()
     
     # temp.compara_multiplos_anos()
