@@ -1,0 +1,4 @@
+,codigo,tipoId,nome,coletaId,orgaoId,municipioId,altitude,latitude,longitude,iniciooperacao,datainstalacao,fimoperacao,orgao
+4308,25134856.0,H,Capivari Montante,T,1.0,4104006.0,819.0,-25.2208,-48.9395,2000-03-21,2000-03-21T00:00:00+0000,,SIMEPAR
+4328,25334953.0,H,Porto Amazonas,T,1.0,4120101.0,0.0,-25.55,-49.8833,1997-06-01,1997-06-01T00:00:00+0000,,SIMEPAR
+4348,25564947.0,H,São Bento,T,1.0,4113205.0,799.0,-25.9333,-49.7833,1997-09-17,1997-09-17T00:00:00+0000,,SIMEPAR
