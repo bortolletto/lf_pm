@@ -1,0 +1,16 @@
+,valores,IN_OUT,tipo
+fracirrigated,1.779612136483609,True,landuse
+fracforest,1.150819319180025,True,landuse
+fracrice,1.253292702121077,True,landuse
+fracother,1.2051222886474748,True,landuse
+fracsealed,1.5073622335666657,True,landuse
+fracwater,1.169142780277245,True,landuse
+genua,1.9531185479768527,True,soilhyd
+lambda,0.6124326502006391,True,soilhyd
+thetas,1.355175608613992,True,soilhyd
+thetar,1.999388131181048,True,soilhyd
+ksat,0.6077245835930061,True,soilhyd
+cropcoef,1.252550823233123,True,table2map
+mannings,0.917897343917213,True,table2map
+soildepth2,0.8946483949259191,True,table2map
+soildepth3,0.7219790336451115,True,table2map

@@ -28,7 +28,3 @@
 26,thetas,0.0,1.0,,soilhyd
 27,thetar,0.0,1.0,,soilhyd
 28,ksat,0.0,50.0,,soilhyd
-29,cropcoef,0.2,1.08,,table2map
-30,mannings,0.015,0.2,,table2map
-31,soildepth2,300.0,1500.0,,table2map
-32,soildepth3,550.0,10000.0,,table2map
