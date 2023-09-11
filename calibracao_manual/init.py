@@ -116,7 +116,10 @@ if __name__ == "__main__":
     temp = Calibrador()
     temp.inicializar()
     temp.reseta_for_the_best()
-    temp.executa("novo_test",["table2map"],r = 0.02,m = 100)
+    # temp.executa("novo_test",["table2map"],r = 0.02,m = 100)
+    df_chuvas = pd.read_csv("/discolocal/felipe/git_pm/codigos/chuva_editada.csv",index_col=0,parse_dates = True)
+    df_chuvas = df_chuvas["media"].to_frame()
+    temp.define_nova_chuva(df_chuvas)
     # temp.executar_um_por_ano()
     
     # temp.compara_multiplos_anos()

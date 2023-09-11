@@ -168,7 +168,7 @@ def prenche_falhas(final):
 #%%
 
 for key in quadrantes.keys():
-    key = "nordeste"
+    
     quadrante= quadrantes[key]
     lista_temp = [meu_dicionario[x] for x in quadrante]
     temp = final[lista_temp]
@@ -180,7 +180,7 @@ for key in quadrantes.keys():
     # plota(acumulado_anual,f"quadrante {key} anual",barras = True)
     
     plota(temp,f"quadrante {key}")
-    break
+
 alteracoes = {
     "leste"   : {
         6:[("2016-08-23","2016-10-01"),("2016-03-21","2016-03-21")],
