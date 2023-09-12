@@ -32,7 +32,7 @@ media_antiga = final.mean(axis = 1)
 final = final[:-2]
 anual = final.resample("Y",closed = "left",label = "right").sum(min_count = 150)
 
-estac = pd.read_csv("/discolocal/felipe/Progamas/coleta_dados/coleta_metadados/estações_dados.csv")
+estac = pd.read_csv("./estacoes_dados.csv")
 estac.loc[estac.orgao == "SIMEPAR"]
 estac = estac[estac['codigo'].isin(codigos)]
 estac.to_csv("../chuva_simepar/estacoes_chuva.csv")
