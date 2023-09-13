@@ -68,32 +68,50 @@ class Funcionalidades():
                 # print(self.df_estatico)
         return self.df_estatico ,self.df_meteo , self.df_lai
 
-    def reseta_for_the_best(self,nome=None):
-        local_novo_plot = "./tabelas/melhor_resultado.csv"
-        df_esperado = pd.read_csv(local_novo_plot,index_col = 0)
-        df_esperado = df_esperado[:-4]
-        if len(df_esperado.columns) >1:
-            df_esperado = df_esperado[df_esperado.columns[-1]].to_frame()
+    def reseta_for_the_best(self,nominal = None,tipos_alvo = None):
+        self.resetando = pd.read_csv(f"{self.FILE_DIR}tabelas/fator_param_ranges.csv",index_col = 0)
+        self.resetando["ON_OFF"] = True
         
+        if nominal != None and tipos_alvo != None:
+            for nom in nominal:
+                self.resetando.loc[self.resetando["ParameterName"] == nom,"ON_OFF"] = False
+            for tipo in tipos_alvo:
+                self.resetando.loc[self.resetando["tipo"] == tipo,"ON_OFF"] = False
+                
+        elif nominal != None:
+            self.resetando["ON_OFF"] = ~self.resetando["tipo"].isin(nominal)
+                
+        elif tipos_alvo != None:
+            self.resetando["ON_OFF"] = ~self.resetando["tipo"].isin(tipos_alvo)
+
+        df_esperado = self.resetando.DefaultValue.to_frame()
+
         temp = df_esperado[df_esperado.columns.values[0]].values
-        self.nomes_paramns["valores"]= temp
+        self.resetando["valores"] =temp
+        print("parametros a seguir foram alterados:")
+        print(self.resetando)
+
+        # self.resetando["ON_OFF"] = ~self.resetando["ON_OFF"].isin(tipos_alvo)
         
         settings_file = f"{self.SETTINGS_DIR}/settings.xml"
         
-        for variavel,nome  in zip( self.nomes_paramns.loc[self.nomes_paramns.tipo == "xml","valores"],self.nomes_paramns.loc[self.nomes_paramns.tipo == "xml","ParameterName"]) : 
-            self.editar_valor_variavel(settings_file,2,nome,variavel)
         
-        for variavel,nome  in zip( self.nomes_paramns.loc[self.nomes_paramns.tipo != "xml","valores"],self.nomes_paramns.loc[self.nomes_paramns.tipo != "xml","ParameterName"]) : 
-        
-             tipo = self.nomes_paramns.loc[self.nomes_paramns["ParameterName"] ==nome,"ON_OFF"].values[0]
+        for variavel,nome  in zip( self.resetando.loc[self.resetando.tipo == "xml","valores"],self.resetando.loc[self.resetando.tipo == "xml","ParameterName"]) : 
+                tipo = self.resetando.loc[self.resetando["ParameterName"] ==nome,"ON_OFF"].values[0]
+                if tipo == False:
+                    continue
+                else:     
+                    self.editar_valor_variavel(settings_file,2,nome,variavel)
+                
+        for variavel,nome  in zip( self.resetando.loc[self.resetando.tipo != "xml","valores"],self.resetando.loc[self.resetando.tipo != "xml","ParameterName"]) :         
+             tipo = self.resetando.loc[self.resetando["ParameterName"] ==nome,"ON_OFF"].values[0]
              if tipo == False:
                  continue
              else:
                  self.inicia(nome,tipo,variavel)
                  self.manipular()
-
     def reseta(self):
-
+        # print(self._d1ct)
         for chaves in self._dct.keys():
             entrada = self._dct[chaves]["entrada"]
             saida = self._dct[chaves]["saida"]
@@ -137,7 +155,14 @@ class Funcionalidades():
           temp2.pr.values = matrizes
           os.remove("../catch/meteo/pr.nc")
           temp2.to_netcdf("../catch/meteo/pr.nc")
-          
+     
+    def seta_melhores_parametros(self,file=None):
+        df = pd.read_csv("./tabelas/fator_param_ranges.csv",index_col = 0)
+        if file ==None:
+            file = "./tabelas/resultados/plt_geral/13_9/primeiro teste serio.csv"
+        dx = pd.read_csv(file)
+        df.DefaultValue = dx[dx.columns[-1]]
+        df.to_csv("./tabelas/fator_param_ranges.csv",index = True)
     # 
 # if __name__ == "__main__":
     # import xml.etree.ElementTree as ET
