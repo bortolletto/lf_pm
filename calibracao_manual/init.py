@@ -43,7 +43,7 @@ class Calibrador(rodando,Funcionalidades):
         '''
         
         self.dataframe = pd.read_csv(f"{self.FILE_DIR}tabelas/tabela.csv",index_col = 0)
-        print(self.dataframe)
+        # print(self.dataframe)
         dct = {}
         for nome ,tipo in zip(self.dataframe.index,self.dataframe.tipo):
             if tipo == "landuse":
@@ -64,24 +64,39 @@ class Calibrador(rodando,Funcionalidades):
             
         dct["cropgrpn"] = {
             "tipo":"table2map",
-            "entrada": f"{self.OUT_DIR}/{tipo}/",
-            "saida":  f"{self.OUT_DIR}/{tipo}/",
+            "entrada": f"{self.IN_DIR}/{tipo}/",
+            "saida":  f"{self.OUT_DIR}/maps/{tipo}/",
             "ON_OFF":False
             }
         self._dct = dct
 
-    def define_ativos(self,tipos_alvo):
+    def define_ativos(self,nominal=None,tipos_alvo=None):
+          self.nomes_paramns = pd.read_csv(f"{self.FILE_DIR}tabelas/fator_param_ranges.csv",index_col = 0)
+          self.nomes_paramns["ON_OFF"] = True
           
-          for tipos in tipos_alvo:
-              self.nomes_paramns.loc[self.nomes_paramns["tipo"] == tipos,"ON_OFF"] = False
+          if nominal != None and tipos_alvo != None:
+              for nom in nominal:
+                  self.nomes_paramns.loc[self.nomes_paramns["ParameterName"] == nom,"ON_OFF"] = False
+              for tipo in tipos_alvo:
+                  self.nomes_paramns.loc[self.nomes_paramns["tipo"] == tipo,"ON_OFF"] = False
+                  
+          elif nominal != None:
+              self.nomes_paramns["ON_OFF"] = ~self.nomes_paramns["tipo"].isin(nominal)
+                  
+          elif tipos_alvo != None:
+              self.nomes_paramns["ON_OFF"] = ~self.nomes_paramns["tipo"].isin(tipos_alvo)
+              
+          self.nomes_paramns = self.nomes_paramns[self.nomes_paramns["ON_OFF"]==True]
+          print("os seguintes parametros serão calibrados:")
+          print(self.nomes_paramns)
+          self.lower = self.nomes_paramns["MinValue"]
+          self.upper = self.nomes_paramns["MaxValue"]
+              
     def ler_parametros(self):
-        self.uper_lower = pd.read_csv(f"{self.FILE_DIR}tabelas/fator_param_ranges.csv",index_col = 0)
-        self.lower = self.uper_lower["MinValue"]
-        self.upper = self.uper_lower["MaxValue"]
-        self.nomes_paramns = self.uper_lower["ParameterName"].to_frame()
-        self.nomes_paramns["tipo"] = self.uper_lower["tipo"]
+        self.nomes_paramns = pd.read_csv(f"{self.FILE_DIR}tabelas/fator_param_ranges.csv",index_col = 0)
         self.nomes_paramns["ON_OFF"] = True
-    
+
+
     def ler_obs(self):
         df_loc = f"{self.FILE_DIR}tabelas/"
 
@@ -92,14 +107,11 @@ class Calibrador(rodando,Funcionalidades):
         self._obs = obs
 
       
-    def executa(self, arquivo_saida,tipos_alvo = [],r = 0.2,m = 1000):
+    def executa(self, arquivo_saida,r = 0.2,m = 1000):
         self.arquivo_saida = arquivo_saida
-        self.comparando_multiplos_anos = False
-        self.resultados = pd.DataFrame()
- 
+        self.resultados = pd.DataFrame() 
         self.xbest_f,self.fbest_f= self.dds(self.lower,self.upper,super().erro,r,m)
         self.plota()
-        
         self.resultados.set_index(self.nomes_paramns["ParameterName"],inplace =True)
         self.resultados = self.resultados.rename_axis(index={'ParameterName': 'F_obj:'})
         self.resultados.to_csv(f"{self.pasta }/{self.arquivo_saida}.csv")
@@ -109,11 +121,16 @@ if __name__ == "__main__":
     
     temp = Calibrador()
     temp.inicializar()
-    temp.reseta_for_the_best()
+    
+    temp.reseta()
+    temp.seta_melhores_parametros("./tabelas/resultados/plt_geral/")
+    temp.reseta_for_the_best(nominal=["genua","lambda","ksat"],tipos_alvo = ["xml"])
+    
+    temp.define_ativos(nominal=["genua","lambda","ksat"],tipos_alvo = ["xml"])
     df_chuva = pd.read_csv("./tabelas/chuva_editada.csv",index_col = 0,parse_dates = True)
     df_chuva = df_chuva.media.to_frame()
     temp.define_nova_chuva(df_chuva)
-    temp.executa("primeiro teste serio",m =100)
+    temp.executa("testando somente com theta_sr",m =200)
     
 
     
