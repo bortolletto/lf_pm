@@ -110,11 +110,10 @@ class Calibrador(rodando,Funcionalidades):
     def executa(self, arquivo_saida,r = 0.2,m = 1000):
         self.arquivo_saida = arquivo_saida
         self.resultados = pd.DataFrame() 
+        
         self.xbest_f,self.fbest_f= self.dds(self.lower,self.upper,super().erro,r,m)
         self.plota()
-        self.resultados.set_index(self.nomes_paramns["ParameterName"],inplace =True)
-        self.resultados = self.resultados.rename_axis(index={'ParameterName': 'F_obj:'})
-        self.resultados.to_csv(f"{self.pasta }/{self.arquivo_saida}.csv")
+        
 
         #%%
 if __name__ == "__main__":
@@ -123,14 +122,27 @@ if __name__ == "__main__":
     temp.inicializar()
     
     temp.reseta()
-    temp.seta_melhores_parametros("./tabelas/resultados/plt_geral/")
+    temp.seta_melhores_parametros("./tabelas/resultados/plt_geral/12_9/primeiro teste serio.csv",skip = True)
     temp.reseta_for_the_best(nominal=["genua","lambda","ksat"],tipos_alvo = ["xml"])
     
     temp.define_ativos(nominal=["genua","lambda","ksat"],tipos_alvo = ["xml"])
     df_chuva = pd.read_csv("./tabelas/chuva_editada.csv",index_col = 0,parse_dates = True)
     df_chuva = df_chuva.media.to_frame()
     temp.define_nova_chuva(df_chuva)
-    temp.executa("testando somente com theta_sr",m =200)
+    temp.executa("calibra_landuse",m =100)
+    
+    temp2 = Calibrador()
+    temp2.inicializar()
+    
+    temp2.reseta()
+    temp2.seta_melhores_parametros("./tabelas/resultados/plt_geral/15_9/calibra_landuse.csv")
+    temp2.reseta_for_the_best(nominal=["genua","lambda","ksat"],tipos_alvo = ["landuse"])
+    
+    temp2.define_ativos(nominal=["genua","lambda","ksat"],tipos_alvo = ["landuse"])
+    df_chuva = pd.read_csv("./tabelas/chuva_editada.csv",index_col = 0,parse_dates = True)
+    df_chuva = df_chuva.media.to_frame()
+    temp2.define_nova_chuva(df_chuva)
+    temp2.executa("calibra_xml",m =100)
     
 
     

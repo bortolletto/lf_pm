@@ -88,8 +88,8 @@ class Funcionalidades():
 
         temp = df_esperado[df_esperado.columns.values[0]].values
         self.resetando["valores"] =temp
-        print("parametros a seguir foram alterados:")
-        print(self.resetando)
+        # print("parametros a seguir foram alterados:")
+        # print(self.resetando)
 
         # self.resetando["ON_OFF"] = ~self.resetando["ON_OFF"].isin(tipos_alvo)
         
@@ -156,12 +156,18 @@ class Funcionalidades():
           os.remove("../catch/meteo/pr.nc")
           temp2.to_netcdf("../catch/meteo/pr.nc")
      
-    def seta_melhores_parametros(self,file=None):
+    def seta_melhores_parametros(self,file=None,skip = False):
         df = pd.read_csv("./tabelas/fator_param_ranges.csv",index_col = 0)
         if file ==None:
             file = "./tabelas/resultados/plt_geral/13_9/primeiro teste serio.csv"
         dx = pd.read_csv(file)
-        df.DefaultValue = dx[dx.columns[-1]]
+        
+        if skip == False:
+            for parametro in dx.ParameterName:
+                df.loc[df.ParameterName == parametro,"DefaultValue"] = dx.loc[dx.ParameterName == parametro,dx.columns.values[-1]].values[0]
+        else:
+            df.DefaultValue = dx[dx.columns[-1]].values
+
         df.to_csv("./tabelas/fator_param_ranges.csv",index = True)
     # 
 # if __name__ == "__main__":
