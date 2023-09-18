@@ -4,3 +4,5 @@
 **/*.xlsx
 **/*.zip
 ./catch/
+./calibracao_manual/tabelas/resultados/
+

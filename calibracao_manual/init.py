@@ -129,20 +129,20 @@ if __name__ == "__main__":
     df_chuva = pd.read_csv("./tabelas/chuva_editada.csv",index_col = 0,parse_dates = True)
     df_chuva = df_chuva.media.to_frame()
     temp.define_nova_chuva(df_chuva)
-    temp.executa("calibra_landuse",m =100)
+    temp.executa("calibra_land_use",m =1500)
     
     temp2 = Calibrador()
     temp2.inicializar()
     
     temp2.reseta()
-    temp2.seta_melhores_parametros("./tabelas/resultados/plt_geral/15_9/calibra_landuse.csv")
+    temp2.seta_melhores_parametros("./tabelas/resultados/plt_geral/16_9/calibra_land_use.csv")
     temp2.reseta_for_the_best(nominal=["genua","lambda","ksat"],tipos_alvo = ["landuse"])
     
     temp2.define_ativos(nominal=["genua","lambda","ksat"],tipos_alvo = ["landuse"])
     df_chuva = pd.read_csv("./tabelas/chuva_editada.csv",index_col = 0,parse_dates = True)
     df_chuva = df_chuva.media.to_frame()
     temp2.define_nova_chuva(df_chuva)
-    temp2.executa("calibra_xml",m =100)
+    temp2.executa("calibra_xml",m =1000)
     
 
     
