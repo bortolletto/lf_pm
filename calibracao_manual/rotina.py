@@ -123,39 +123,24 @@ class rodando(Altera_Xml):
                   Fbest = Fnew
                   Xbest = np.copy(Xnew)
                   print(Fbest)
-                  
-                  
-                  
                   if hasattr(self, 'pasta') and isinstance(self.pasta, str):
-                        continue
+                        pass
                   else:
-
                       data_hoje = datetime.date.today()
                       local_pasta = f"{self.FILE_DIR}tabelas/resultados/plt_geral/"
                       self.pasta = f"{local_pasta}{data_hoje.day}_{data_hoje.month}/"
                       if not os.path.exists(self.pasta ):
-                          os.makedirs(self.pasta )
-                          
-                          
-                          
+                          os.makedirs(self.pasta )   
                   place = f"{self.pasta}/{self.arquivo_saida}.csv"
                   if not os.path.exists(place):
                       self.resultados = pd.DataFrame()
                       self.resultados.index = self.nomes_paramns.ParameterName
                       # print(self.nomes_paramns.DefaultValue)
                       self.resultados["default"] = self.nomes_paramns.DefaultValue.values
-                      self.resultados.to_csv(place)
-                      
-
-                  
-                      
+                      self.resultados.to_csv(place)                      
                   self.resultados = pd.read_csv(place,index_col = 0)
                   self.resultados[Fbest] = Xbest
-                  self.resultados.to_csv(place)
-
-                      
-                 
-                 
+                  self.resultados.to_csv(place)                 
           # Fim
           return Xbest, Fbest 
     
@@ -248,7 +233,12 @@ class rodando(Altera_Xml):
 
         self.ler_saida()
         self.nash_value = self.nash(recorta)
-        return (1 - self.nash_value)
+        if self.nash_value > 1 :
+            return (1 - (-self.nash_value))
+        else:
+            return (1 - self.nash_value)
+        
+        # return (1 - self.nash_value)
     
 #     def dds_nc(self,Xmin, Xmax, fobj, r=0.2, m=1000):
 #           # Passo 1
