@@ -31,7 +31,7 @@ df["ls_dis"] = lista
 # df["ls_dis"] = temp["vazao_25334953_Porto Amazonas"].values
 # obs = pd.read_csv("/discolocal/felipe/Progamas/coleta_dados/coleta/mapas_tcc/vazao/vazao_25334953_Porto Amazonas.csv",index_col = 0,parse_dates=True)
 # obs.drop(columns = ["horqualidade"],inplace = True)
-obs = pd.read_csv("/discolocal/felipe/lisflood_pm/vazoes_observadas/vazao_25334953_Porto Amazonas.csv",index_col = 0,parse_dates=True)
+obs = pd.read_csv("../calibracao_manual/tabelas/pm_vazao_obs.csv",index_col = 0,parse_dates=True)
 obs = obs["2013-01-01":"2023-04-07"]
 obs = obs.resample("D", closed='left', label='left').agg({'horleitura':(np.mean)})
 
@@ -52,7 +52,7 @@ if not os.path.exists(pasta):
     print(f"Pasta '{pasta}' criada com sucesso.")
 else:
     print(f"A pasta '{pasta}' já existe.")
-fig.write_html(f"{pasta}/nova_chuva_estac_atualizado.html")
+fig.write_html(f"{pasta}/sem evapo.html")
 
 
 #%%

@@ -332,7 +332,7 @@ CALIBRATION PARAMETERS
 with .nc format: than working with smaller sub-areas is possible
 **************************************************************
 </comment>
-<textvar name="UpperZoneTimeConstant" value="11.922106635666184">
+<textvar name="UpperZoneTimeConstant" value="9.89046941501782">
 <comment>
 default: 10
 $(PathParams)/params_UpperZoneTimeConstant.nc
@@ -342,7 +342,7 @@ if we had a stationary system (average inflow=average outflow)
 </comment>
 </textvar>
 
-<textvar name="LowerZoneTimeConstant" value="69.7852359641041">
+<textvar name="LowerZoneTimeConstant" value="549.4796455824301">
 <comment>
 default: 100
 $(PathParams)/params_LowerZoneTimeConstant.nc
@@ -352,7 +352,7 @@ if we had a stationary system (average inflow=average outflow)
 </comment>
 </textvar>
 
-<textvar name="GwPercValue" value="1.0119828584597008">
+<textvar name="GwPercValue" value="1.47473869929457">
 <comment>
 default: 0.5
 $(PathParams)/params_GwPercValue.nc
@@ -361,7 +361,7 @@ response box [mm/day]
 </comment>
 </textvar>
 
-<textvar name="GwLoss" value="0.0014600179527613">
+<textvar name="GwLoss" value="0.0">
 <comment>
 default: 0.0
 $(PathParams)/params_GwLoss.nc
@@ -371,7 +371,7 @@ A value of 0 (closed lower boundary) is recommended as a starting value.
 </comment>
 </textvar>
 
-<textvar name="LZThreshold" value="6.223752043179625">
+<textvar name="LZThreshold" value="28.67962583409484">
 <comment>
 threshold value [mm] of the water storage in the lower groundwater zone. 
 If the water storage in the lower groundwater zone  decreases below LZThreshold,
@@ -379,7 +379,7 @@ the flow from the lower zone to the nearby rivers (base-flow) stops.
 </comment>
 </textvar>
 
-<textvar name="b_Xinanjiang" value="2.2385336886122538">
+<textvar name="b_Xinanjiang" value="2.932745640651581">
 <comment>
 default: 0.7 [-]
 $(PathParams)/params_b_Xinanjiang.nc
@@ -387,7 +387,7 @@ Power in Xinanjiang distribution function [-]
 </comment>
 </textvar>
 
-<textvar name="PowerPrefFlow" value="1.2476515280437794">
+<textvar name="PowerPrefFlow" value="0.9910476672951972">
 <comment>
 default: 3.5 [-]
 $(PathParams)/params_PowerPrefFlow.nc
@@ -396,7 +396,7 @@ flow with increased soil moisture storage [-]
 </comment>
 </textvar>
 
-<textvar name="CalChanMan" value="1.8326268116987745">
+<textvar name="CalChanMan" value="1.3743108413208576">
 <comment>
 default: 2.0 [-]
 $(PathParams)/params_CalChanMan1.nc
@@ -404,7 +404,7 @@ Multiplier [-] applied to Channel Manning's n
 </comment>
 </textvar>
 
-<textvar name="SnowMeltCoef" value="4.848677595230577">
+<textvar name="SnowMeltCoef" value="3.675248944532224">
 <comment>
 default: 4.0 [mm C-1 day-1]
 $(PathParams)/params_SnowMeltCoef.nc
@@ -413,7 +413,7 @@ See also Martinec et al., 1998.
 </comment>
 </textvar>
 
-<textvar name="CalChanMan2" value="2.832888310835467">
+<textvar name="CalChanMan2" value="0.8606680495767594">
 <comment>
 default: 3.0 [-]
 $(PathParams)/params_CalChanMan2.nc
@@ -421,7 +421,7 @@ Multiplier [-] applied to Channel Manning's n for second line of routing
 </comment>
 </textvar>
 
-<textvar name="LakeMultiplier" value="0.9139501522033436">
+<textvar name="LakeMultiplier" value="0.6688858102038712">
 <comment>
 default: 1.0 [-]
 $(PathParams)/params_LakeMultiplier.nc
@@ -429,7 +429,7 @@ Multiplier applied to the lake parameter A
 </comment>
 </textvar>
 
-<textvar name="adjust_Normal_Flood" value="0.5378447935902333">
+<textvar name="adjust_Normal_Flood" value="0.1430891356877378">
 <comment>
 default: 0.8 [-]
 $(PathParams)/params_adjust_Normal_Flood.nc
@@ -439,7 +439,7 @@ Range 0.01 - 0.99
 </comment>
 </textvar>
 
-<textvar name="ReservoirRnormqMult" value="1.3282476400637524">
+<textvar name="ReservoirRnormqMult" value="0.4204429075172665">
 <comment>
 default: 1.0 [-]
 $(PathParams)/params_ReservoirRnormqMult.nc
@@ -448,7 +448,7 @@ fraction of the value in table rnormq.txt range: 0.5 - 2
 </comment>
 </textvar>
 
-<textvar name="AvWaterRateThreshold" value="59.18207510865751">
+<textvar name="AvWaterRateThreshold" value="95.42648167693062">
 <comment>
 default: 5.0 [mm/day] (not included in calibration)
 Critical amount of available water (expressed in [mm/day]!), above which 'Days Since Last Rain' parameter is
@@ -456,7 +456,7 @@ set to 1
 </comment>
 </textvar>
 
-<textvar name="QSplitMult" value="10.693478554360276">
+<textvar name="QSplitMult" value="11.887062533775287">
 <comment>
 PBchange
 Multiplier applied to average Q to split into a second line of routing
@@ -464,20 +464,20 @@ THIS NEEDS TO BE AMENDED BY ADDING THE RIGHT PATH TO $(PathParams)
 </comment>
 </textvar>
 
-<textvar name="ChanBottomWMult" value="2.320530633360641">
+<textvar name="ChanBottomWMult" value="1.474495942128084">
 <comment>
 PBchange
 Multiplier applied to ChanBottomWidth
 </comment>
 </textvar>
 
-<textvar name="ChanDepthTMult" value="2.7050421706100134">
+<textvar name="ChanDepthTMult" value="1.187900375379896">
 <comment>
 Multiplier [] applied to ChanDepthThreshold
 </comment>
 </textvar>
 
-<textvar name="ChanSMult" value="3.0199585329815646">
+<textvar name="ChanSMult" value="2.38971073070188">
 <comment>
 Multiplier []  applied to ChanSdXdY
 </comment>

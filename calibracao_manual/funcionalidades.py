@@ -69,7 +69,9 @@ class Funcionalidades():
         return self.df_estatico ,self.df_meteo , self.df_lai
 
     def reseta_for_the_best(self,nominal = None,tipos_alvo = None):
-        self.resetando = pd.read_csv(f"{self.FILE_DIR}tabelas/fator_param_ranges.csv",index_col = 0)
+        
+        self.resetando = pd.read_csv(f"./tabelas/fator_param_ranges.csv",index_col = 0)
+        # print(self.resetando)
         self.resetando["ON_OFF"] = True
         
         if nominal != None and tipos_alvo != None:
@@ -92,8 +94,8 @@ class Funcionalidades():
         print(self.resetando)
 
         # self.resetando["ON_OFF"] = ~self.resetando["ON_OFF"].isin(tipos_alvo)
-        
-        settings_file = f"{self.SETTINGS_DIR}/settings.xml"
+        # print(self.SETTINGS_DIR)
+        settings_file = f"../settings.xml"
         
         
         for variavel,nome  in zip( self.resetando.loc[self.resetando.tipo == "xml","valores"],self.resetando.loc[self.resetando.tipo == "xml","ParameterName"]) : 
@@ -159,12 +161,16 @@ class Funcionalidades():
     def seta_melhores_parametros(self,file=None):
         df = pd.read_csv("./tabelas/fator_param_ranges.csv",index_col = 0)
         if file ==None:
-            file = "./tabelas/resultados/plt_geral/13_9/primeiro teste serio.csv"
+            file = "/home/felipe/Documentos/lf_pm/calibracao_manual/tabelas/resultados/plt_geral/11_9/primeiro teste serio.csv"
         dx = pd.read_csv(file)
         df.DefaultValue = dx[dx.columns[-1]]
         df.to_csv("./tabelas/fator_param_ranges.csv",index = True)
     # 
 # if __name__ == "__main__":
+    # temp = Funcionalidades()
+    # temp.seta_melhores_parametros()
+    
+    # temp.reseta_for_the_best()
     # import xml.etree.ElementTree as ET
     
     # caminho_arquivo = "/discolocal/felipe/lisflood_pm/compara_anos.xml"  # Substitua pelo caminho correto

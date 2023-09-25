@@ -118,19 +118,45 @@ class Calibrador(rodando,Funcionalidades):
 
         #%%
 if __name__ == "__main__":
-    
+    import xarray as xr
     temp = Calibrador()
     temp.inicializar()
     
     temp.reseta()
-    temp.seta_melhores_parametros("./tabelas/resultados/plt_geral/")
-    temp.reseta_for_the_best(nominal=["genua","lambda","ksat"],tipos_alvo = ["xml"])
+    temp.seta_melhores_parametros()
+    temp.reseta_for_the_best()
+    e0 = xr.open_dataset("/home/felipe/Documentos/lf_pm/calibracao_manual/params_calibration/meteo/e0.nc")
+    es = xr.open_dataset("/home/felipe/Documentos/lf_pm/calibracao_manual/params_calibration/meteo/es.nc")
+    et = xr.open_dataset("/home/felipe/Documentos/lf_pm/calibracao_manual/params_calibration/meteo/et.nc")
     
-    temp.define_ativos(nominal=["genua","lambda","ksat"],tipos_alvo = ["xml"])
+    e0.e0.values = e0.e0.values/100    
+    es.es.values = es.es.values/100    
+    et.et.values = et.et.values/100    
+    import os 
+    
+    os.remove("/home/felipe/Documentos/lf_pm/catch/meteo/e0.nc")
+    e0.to_netcdf("/home/felipe/Documentos/lf_pm/catch/meteo/e0.nc")
+    
+    
+    os.remove("/home/felipe/Documentos/lf_pm/catch/meteo/es.nc")
+    es.to_netcdf("/home/felipe/Documentos/lf_pm/catch/meteo/es.nc")
+    
+    
+    os.remove("/home/felipe/Documentos/lf_pm/catch/meteo/et.nc")
+    et.to_netcdf("/home/felipe/Documentos/lf_pm/catch/meteo/et.nc")
+    
+    
+    # temp.seta_melhores_parametros("./tabelas/resultados/plt_geral/13_9/testando somente com theta_sr.csv")
+
+    # temp.reseta_for_the_best(nominal=["genua","lambda","ksat"],tipos_alvo = ["xml"])
+    
+    # temp.define_ativos(nominal=["genua","lambda","ksat"],tipos_alvo = ["xml"])
     df_chuva = pd.read_csv("./tabelas/chuva_editada.csv",index_col = 0,parse_dates = True)
     df_chuva = df_chuva.media.to_frame()
     temp.define_nova_chuva(df_chuva)
-    temp.executa("testando somente com theta_sr",m =200)
+    temp.executa("utilizando uma evapo pequena",m =1500)
     
 
     
+
+# df = pd.read_csv("./tabelas/resultados/plt_geral/13_9/testando somente com theta_sr.csv")
