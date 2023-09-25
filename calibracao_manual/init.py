@@ -110,14 +110,14 @@ class Calibrador(rodando,Funcionalidades):
     def executa(self, arquivo_saida,r = 0.2,m = 1000):
         self.arquivo_saida = arquivo_saida
         self.resultados = pd.DataFrame() 
+        
         self.xbest_f,self.fbest_f= self.dds(self.lower,self.upper,super().erro,r,m)
         self.plota()
-        self.resultados.set_index(self.nomes_paramns["ParameterName"],inplace =True)
-        self.resultados = self.resultados.rename_axis(index={'ParameterName': 'F_obj:'})
-        self.resultados.to_csv(f"{self.pasta }/{self.arquivo_saida}.csv")
+        
 
         #%%
 if __name__ == "__main__":
+<<<<<<< HEAD
     import xarray as xr
     temp = Calibrador()
     temp.inicializar()
@@ -160,3 +160,34 @@ if __name__ == "__main__":
     
 
 # df = pd.read_csv("./tabelas/resultados/plt_geral/13_9/testando somente com theta_sr.csv")
+=======
+    
+    # temp = Calibrador()
+    # temp.inicializar()
+    
+    # temp.reseta()
+    # temp.seta_melhores_parametros("./tabelas/resultados/plt_geral/12_9/primeiro teste serio.csv",skip = True)
+    # temp.reseta_for_the_best(nominal=["genua","lambda","ksat"],tipos_alvo = ["xml"])
+    
+    # temp.define_ativos(nominal=["genua","lambda","ksat"],tipos_alvo = ["xml"])
+    # df_chuva = pd.read_csv("./tabelas/chuva_editada.csv",index_col = 0,parse_dates = True)
+    # df_chuva = df_chuva.media.to_frame()
+    # temp.define_nova_chuva(df_chuva)
+    # temp.executa("new_onw_nash__",m =1000)
+    
+    temp2 = Calibrador()
+    temp2.inicializar()
+    
+    temp2.reseta()
+    temp2.seta_melhores_parametros("./tabelas/resultados/plt_geral/19_9/new_onw_nash__.csv")
+    temp2.reseta_for_the_best(nominal=["genua","lambda","ksat"],tipos_alvo = ["landuse"])
+    
+    temp2.define_ativos(nominal=["genua","lambda","ksat"])
+    df_chuva = pd.read_csv("./tabelas/chuva_editada.csv",index_col = 0,parse_dates = True)
+    df_chuva = df_chuva.media.to_frame()
+    temp2.define_nova_chuva(df_chuva)
+    temp2.executa("calibra_tudo",m =1000)
+    
+
+    
+>>>>>>> refs/remotes/origin/main
