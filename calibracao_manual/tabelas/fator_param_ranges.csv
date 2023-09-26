@@ -17,7 +17,6 @@
 15,ChanDepthTMult,0.0,5.0,1.187900375379896,xml
 16,ChanSMult,0.0,5.0,2.38971073070188,xml
 17,GwLoss,0.0,0.0,0.0,xml
-<<<<<<< HEAD
 18,fracirrigated,0.0,1.0,0.3828214597512155,landuse
 19,fracforest,0.0,1.0,0.0905412501397981,landuse
 20,fracrice,0.0,1.0,0.3249988754982984,landuse
@@ -29,7 +28,6 @@
 26,thetas,0.0,1.0,0.4995777850724676,soilhyd
 27,thetar,0.0,1.0,0.4879471316862501,soilhyd
 28,ksat,0.0,50.0,34.35174896030859,soilhyd
-=======
 18,fracirrigated,0.0,1.0,0.2441990676435912,landuse
 19,fracforest,0.0,1.0,0.2953217870822506,landuse
 20,fracrice,0.0,1.0,0.3530760869433184,landuse
@@ -41,4 +39,3 @@
 26,thetas,0.0,1.0,0.6470456789145624,soilhyd
 27,thetar,0.0,1.0,0.5,soilhyd
 28,ksat,0.0,50.0,20.03688223431704,soilhyd
->>>>>>> refs/remotes/origin/main

@@ -171,6 +171,8 @@ class Funcionalidades():
             df.DefaultValue = dx[dx.columns[-1]].values
 
         df.to_csv("./tabelas/fator_param_ranges.csv",index = True)
+        
+   
     # 
 # if __name__ == "__main__":
     # temp = Funcionalidades()

@@ -48,7 +48,7 @@ class rodando(Altera_Xml):
        self.diretorio_entrada = self._dct[self._nome]["entrada"]
        self.diretorio_saida = self._dct[self._nome]["saida"]
        self.files =[f for f in os.listdir(f"{self.diretorio_entrada}") if f.endswith(".nc")]
-       
+
     def manipular(self):
         '''
         Função que altera o valor do nc        
@@ -75,8 +75,13 @@ class rodando(Altera_Xml):
         '''
         for arquivo in self.files:
                self.dataset = xr.open_dataset(f"{self.diretorio_entrada}{arquivo}")
-               self.name_var = list(self.dataset.variables)[-1]     
-               self.dataset[self.name_var].values = [[self._fator for _ in range(len(self.dataset.x))] for _ in range(len(self.dataset.y))]
+               self.name_var = list(self.dataset.variables)[-1]  
+               if  not isinstance(self._fator,float):
+                   # print(self._fator)
+                   self.dataset[self.name_var].values = self._fator
+               else:
+   
+                   self.dataset[self.name_var].values = [[self._fator for _ in range(len(self.dataset.x))] for _ in range(len(self.dataset.y))]
                os.remove(f"{self.diretorio_saida}{arquivo}")
                self.dataset.to_netcdf(f"{self.diretorio_saida}{arquivo}")
  #%% 
@@ -106,17 +111,23 @@ class rodando(Altera_Xml):
                   N = [np.random.choice(ds)]
               # Passo 4
               Xnew = np.copy(Xbest)
-             
+              Xnew = np.array(Xbest, dtype=object)
               for j in N:
-                  Xnew[j] = Xbest[j] + r*dX[j]*np.random.normal(0, 1)
-                  if Xnew[j] < Xmin[j]:
-                      Xnew[j] = Xmin[j] + (Xmin[j] - Xnew[j])
-                      if Xnew[j] > Xmax[j]:
-                          Xnew[j] = Xmin[j]
-                  elif Xnew[j] > Xmax[j]:
-                      Xnew[j] = Xmax[j] - (Xnew[j] - Xmax[j])
+                  if j <= 18:
+                      
+                      Xnew[j] = Xbest[j] + r*dX[j]*np.random.normal(0, 1)
                       if Xnew[j] < Xmin[j]:
-                          Xnew[j] = Xmax[j]
+                          Xnew[j] = Xmin[j] + (Xmin[j] - Xnew[j])
+                          if Xnew[j] > Xmax[j]:
+                              Xnew[j] = Xmin[j]
+                      elif Xnew[j] > Xmax[j]:
+                          Xnew[j] = Xmax[j] - (Xnew[j] - Xmax[j])
+                          if Xnew[j] < Xmin[j]:
+                              Xnew[j] = Xmax[j]
+                  else:
+                      matriz = np.random.uniform(Xmin[j], Xmax[j], size=(12, 20))
+
+                      Xnew[j] = matriz
               # Passo 5
               Fnew = fobj(Xnew)
               if Fnew <= Fbest:
@@ -208,7 +219,7 @@ class rodando(Altera_Xml):
     def erro(self,X,substituir = True,recorta = False):
         
         self.nomes_paramns["valores"]= X
-        print(self.nomes_paramns)
+        # print(self.nomes_paramns)
 
 
         settings_file = f"{self.SETTINGS_DIR}/settings.xml"
@@ -227,7 +238,7 @@ class rodando(Altera_Xml):
              # else:
                  self.inicia(nome,tipo,variavel)
                  # self.Open()
-                 self.manipular()
+                 self.manipular_nc()
                      
         os.system(f"lisflood {settings_file}")
 
