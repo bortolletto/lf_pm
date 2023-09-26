@@ -120,14 +120,17 @@ if __name__ == "__main__":
     import xarray as xr
     temp = Calibrador()
     temp.inicializar()
-    
     temp.reseta()
-    temp.reseta_for_the_best()
+    temp.reseta_for_the_best(nominal=["genua","lambda","ksat"],tipos_alvo = ["soilhyd"])
+    temp.define_ativos(nominal=["genua","lambda","ksat"],tipos_alvo = ["soilhyd"])
+    
+    
+    
+    
     df_chuva = pd.read_csv("./tabelas/chuva_editada.csv",index_col = 0,parse_dates = True)
     df_chuva = df_chuva.media.to_frame()
     temp.define_nova_chuva(df_chuva)
-    temp.define_ativos()
-    temp.executa("testando dds",m =2000)
+    temp.executa("aplicando dds para toda a fora soilhyd",m =3500)
     
 
     

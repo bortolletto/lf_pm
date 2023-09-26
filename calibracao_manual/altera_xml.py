@@ -54,7 +54,8 @@ class Altera_Xml():
         tree.write(arquivo_xml)
         
     
-    def ajustar_parametros_ano(self,arquivo_xml, novo_ano):
+    def ajustar_parametros_ano(self,arquivo_xml, novo_ano,final_ano):
+        arquivo_xml = "/discolocal/felipe/git_pm/settings_base.xml"
         tree = ET.parse(arquivo_xml)
         root = tree.getroot()
     
@@ -65,12 +66,12 @@ class Altera_Xml():
                     textvar_element.set('value', novo_ano + "-01-01 00:00")
                     self.data_inicial = novo_ano + "-01-01 00:00"
                 elif var_nome == "StepEnd":
-                    if novo_ano == "2023":
+                    if final_ano == "2023":
                         textvar_element.set('value', "2023-07-04 00:00")
                         self.data_final = "2023-04-07 00:00"
                     else:
-                        textvar_element.set('value', novo_ano + "-12-31 00:00")
-                        self.data_final = novo_ano + "-12-31 00:00"
+                        textvar_element.set('value', final_ano + "-12-31 00:00")
+                        self.data_final = final_ano + "-12-31 00:00"
 
         
         tree.write(arquivo_xml)
