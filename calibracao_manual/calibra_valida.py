@@ -44,18 +44,17 @@ class Calibracao_validacao():
           
           novo_nome_arquivo = arquivo
           caminho_novo_arquivo = os.path.join(destino, novo_nome_arquivo)
-           os.remove(caminho_novo_arquivo)
-           data_selecionada.to_netcdf(caminho_novo_arquivo)
+          os.remove(caminho_novo_arquivo)
+          data_selecionada.to_netcdf(caminho_novo_arquivo)
           print(f"Arquivo ajustado: {caminho_novo_arquivo}")
           
   def calibra_humido(self,novo_ano,final_ano,r=0.2,m=1000):
       caminho_arquivo = f"{self.SETTINGS_DIR}/compara_anos.xml"  # Substitua pelo caminho correto
       self.ajustar_parametros_ano(caminho_arquivo, novo_ano,final_ano)
-      self.ajustar_dimensao_temporal(ano_alvo,ano_final)
-      self.executa(calibracao_humido,["table2map"],r,m)
+      self.ajustar_dimensao_temporal(novo_ano,final_ano)
       self.reseta()
-      self.reseta_for_the_best()
-      self.define_ativos()
+      # self.reseta_for_the_best()
+      # self.define_ativos()
       self.executa(f"calibracao_humido_{novo_ano}:{final_ano}",r,m)
       
       df_esperado = pd.read_csv(self.place,index_col = 0)
@@ -72,14 +71,13 @@ class Calibracao_validacao():
       self.arquivo_saida = f"humido_{novo_ano}_{final_ano}"  
       self.plota(plt_esp = "humido")           
             
-   def calibra_secp(self,novo_ano,final_ano,r=0.2,m=1000):
+  def calibra_seco(self,novo_ano,final_ano,r=0.2,m=1000):
        caminho_arquivo = f"{self.SETTINGS_DIR}/compara_anos.xml"  # Substitua pelo caminho correto
        self.ajustar_parametros_ano(caminho_arquivo, novo_ano,final_ano)
-       self.ajustar_dimensao_temporal(ano_alvo,ano_final)
-       self.executa(calibracao_humido,["table2map"],r,m)
+       self.ajustar_dimensao_temporal(novo_ano,final_ano)
        self.reseta()
-       self.reseta_for_the_best()
-       self.define_ativos()
+       # self.reseta_for_the_best()
+       # self.define_ativos()
        self.executa(f"calibracao_seco_{novo_ano}:{final_ano}",r,m)
        df_esperado = pd.read_csv(self.place,index_col = 0)
        if len(df_esperado.columns) >1:

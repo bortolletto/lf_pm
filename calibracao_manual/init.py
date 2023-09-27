@@ -121,16 +121,14 @@ if __name__ == "__main__":
     temp = Calibrador()
     temp.inicializar()
     temp.reseta()
-    temp.reseta_for_the_best(nominal=["genua","lambda","ksat"],tipos_alvo = ["soilhyd"])
-    temp.define_ativos(nominal=["genua","lambda","ksat"],tipos_alvo = ["soilhyd"])
-    
-    
-    
-    
-    df_chuva = pd.read_csv("./tabelas/chuva_editada.csv",index_col = 0,parse_dates = True)
-    df_chuva = df_chuva.media.to_frame()
-    temp.define_nova_chuva(df_chuva)
-    temp.executa("aplicando dds para toda a fora soilhyd",m =3500)
+    temp.reseta_for_the_best()
+    temp.define_ativos()
+    # df_chuva = pd.read_csv("./tabelas/chuva_editada.csv",index_col = 0,parse_dates = True)
+    # df_chuva = df_chuva.media.to_frame()
+    # temp.define_nova_chuva(df_chuva)
+    temp.calibra_humido("2013","2015")
+    # temp.calibra_seco("2013","2015")
+    # temp.executa("aplicando dds para toda a fora soilhyd",m =3500)
     
 
     

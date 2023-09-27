@@ -55,7 +55,7 @@ class Altera_Xml():
         
     
     def ajustar_parametros_ano(self,arquivo_xml, novo_ano,final_ano):
-        arquivo_xml = "/discolocal/felipe/git_pm/settings_base.xml"
+        # arquivo_xml = "/discolocal/felipe/git_pm/settings_base.xml"
         tree = ET.parse(arquivo_xml)
         root = tree.getroot()
     

@@ -113,7 +113,7 @@ class rodando(Altera_Xml):
               Xnew = np.copy(Xbest)
               Xnew = np.array(Xbest, dtype=object)
               for j in N:
-                  if j <= 18:
+                  # if j <= 18:
                       
                       Xnew[j] = Xbest[j] + r*dX[j]*np.random.normal(0, 1)
                       if Xnew[j] < Xmin[j]:
@@ -124,10 +124,10 @@ class rodando(Altera_Xml):
                           Xnew[j] = Xmax[j] - (Xnew[j] - Xmax[j])
                           if Xnew[j] < Xmin[j]:
                               Xnew[j] = Xmax[j]
-                  else:
-                      matriz = np.random.uniform(Xmin[j], Xmax[j], size=(12, 20))
+                  # else:
+                  #     matriz = np.random.uniform(Xmin[j], Xmax[j], size=(12, 20))
 
-                      Xnew[j] = matriz
+                  #     Xnew[j] = matriz
               # Passo 5
               Fnew = fobj(Xnew)
               if Fnew <= Fbest:
@@ -183,7 +183,7 @@ class rodando(Altera_Xml):
         for i in sim["1"]:
             valor = i.split()[1]
             lista.append(float(valor))
-        if len(lista) <= 400:
+        if len(lista) <= 3000:
             data = pd.date_range(start=self.data_inicial,end = self.data_final,freq = "D" )
         else:
             data = pd.date_range(start="2013-01-03 00:00:00",end = "2023-04-09 00:00:00",freq = "D" )
@@ -242,8 +242,8 @@ class rodando(Altera_Xml):
              # else:
                  self.inicia(nome,tipo,variavel)
                  # self.Open()
-                 self.manipular_nc()
-                     
+                 # self.manipular_nc()
+                 self.manipular()
         os.system(f"lisflood {settings_file}")
 
         self.ler_saida()
