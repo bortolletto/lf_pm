@@ -124,16 +124,19 @@ if __name__ == "__main__":
     temp.reseta()
     temp.reseta_for_the_best()
     # temp.seta_melhores_parametros()
-    temp.define_ativos()
+    # temp.define_ativos()
     
-    # df_chuva = pd.read_csv("./tabelas/chuva_editada.csv",index_col = 0,parse_dates = True)
-    # df_chuva = df_chuva.media.to_frame()
-    # temp.define_nova_chuva(df_chuva)
+    df_chuva = pd.read_csv("./tabelas/chuva_editada.csv",index_col = 0,parse_dates = True)
+    df_chuva = df_chuva.media.to_frame()
+    # df_chuva = pd.read_csv("/discolocal/felipe/git_pm/codigos/chuva_simepar/new_rain/chuva_media.csv",index_col = 0,parse_dates = True)
+    # df_chuva = df_chuva["2013":"2023-04-07"]
+    # df_chuva.rename(columns = {"0":"media"},inplace = True)
+    temp.define_nova_chuva(df_chuva)
     
     
     # temp.calibra_humido("2013","2015")
     # temp.calibra_seco("2016","2020")
-    temp.executa("Nas origines",r = 0.02,m =1000)
+    # temp.executa("Nas origines",r = 0.02,m =1000)
     
     # temp.reseta()
     # temp.reseta_for_the_best()
@@ -143,6 +146,8 @@ if __name__ == "__main__":
     a,b,c = temp.cria_super_csv()
     
     
+    
+
     
     
 

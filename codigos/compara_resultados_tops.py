@@ -42,6 +42,7 @@ obs = obs.resample("D", closed='left', label='left').agg({'horleitura':(np.mean)
 df = pd.merge(df,obs,left_index= True,right_index= True)
 
 df = df["2013-01-01":"2023-04-07"]
+# df = df[20:]
 #%%df
 import plotly.io as pio
 #pio.renderers.default = 'svg'
@@ -49,6 +50,8 @@ pio.renderers.default = 'browser'
 
 
 nash = nse(df["ls_dis"],df["horleitura"])
+import hydroeval as he
+kge, r, alpha, beta = he.evaluator(he.kge, df["ls_dis"], df["horleitura"])
 fig = go.Figure()
 
 fig.add_trace(go.Scatter(x = df.index , y = df.ls_dis,name = f"simulado nash: {nash}",marker_color = "red"))
@@ -62,11 +65,14 @@ if not os.path.exists(pasta):
     print(f"Pasta '{pasta}' criada com sucesso.")
 else:
     print(f"A pasta '{pasta}' já existe.")
+    
+print(kge)
 fig.show()
 # fig.write_html(f"{pasta}/3 anos.html")
 
 
-#%%
+#%%plotar evapo:
+
 
 
 # diretorio = "/discolocal/felipe/LF_pratico/lisflood/porto_amazonas copia/catch/table2map/"
@@ -83,3 +89,14 @@ fig.show()
 # df.band_data.values = df.band_data.values/10
 # os.remove("/discolocal/felipe/LF_pratico/lisflood/porto_amazonas copia/catch/table2map/soildepth2_f.nc")
 # df.to_netcdf("/discolocal/felipe/LF_pratico/lisflood/porto_amazonas copia/catch/table2map/soildepth2_f.nc")
+
+import xarray as xr
+
+df = xr.open_dataset("/discolocal/felipe/git_pm/catch/ec_ldd1.nc")
+df = df.drop("spatial_ref")
+df.loc[{"y":7166615.942,"x":620148.259}]= 9 
+df.loc[{"y":7161615.942,"x":620148.259}]= 9 
+df.loc[{"y":7156615.942,"x":620148.259}]= 9 
+df.to_netcdf("/discolocal/felipe/git_pm/catch/ec_ldd2.nc")
+teste = df.to_dataframe().reset_index().pivot(index="y",columns = "x", values = "band_data")
+teste = teste[::-1]

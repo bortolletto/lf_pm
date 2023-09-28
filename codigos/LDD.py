@@ -14,23 +14,22 @@ Assim como o Dem
 
 
 import xarray as xr
-from osgeo import gdal
 import os 
 import numpy as np 
 
 
 ldd = xr.open_dataset("../catch/maps/ec_ldd.nc")
-rio = xr.open_dataset("/home/felipe.bortolletto/Downloads/teste.tif")
-rio = rio.sel(band = 1)
-rio = rio.drop("band")
-ld = ldd.ec_ldd.values
-rio= rio.band_data.values
+rio = xr.open_dataset("/discolocal/felipe/git_pm/catch/maps/chanlength.nc")
+# rio = rio.sel(band = 1)
+# rio = rio.drop("band")
+ld = ldd.band_data.values
+rio= rio.chanlength.values
 
 dem = xr.open_dataset("/discolocal/felipe/LF_pratico/lisflood/porto_amazonas/catch/maps/elvstd.nc")
 dem = np.array(dem.elvstd.values)
 
 exiit = xr.open_dataset("../catch/maps/outlets.nc")
-exiit = np.array(exiit.outlets.values)
+exiit = np.array(exiit.band_data.values)
 
 # for i in ld:
 #     print(i)
@@ -180,7 +179,8 @@ for linha in range(len(dem)):
         ldd[linha][coluna] = dct_direc[catch]
 
 
-
+dem.elvstd.values = final
+dem.to_netcdf("/discolocal/felipe/git_pm/catch/maps/changrads.nc")
 # '''         
 #   N  = dem[linha -1][coluna]
 #   NL = dem[linha -1][coluna+1]
