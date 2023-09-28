@@ -7,10 +7,10 @@ Created on Thu Aug 10 13:42:37 2023
 """
 
 import os 
-# from pathlib import Path
+
 import pandas as pd 
 import xarray as xr
-import plotly.graph_objs as go
+
 import numpy as np 
 class Funcionalidades():
     
@@ -65,15 +65,15 @@ class Funcionalidades():
                         self.df_estatico = pd.DataFrame(index = df.index)
                         first_estatico = False               
                     self.df_estatico = pd.merge(self.df_estatico,df,how = "inner",left_index=True,right_index=True)
-                # print(self.df_estatico)
+
         return self.df_estatico ,self.df_meteo , self.df_lai
 
     def reseta_for_the_best(self,nominal = None,tipos_alvo = None):
         
-        self.resetando = pd.read_csv(f"./tabelas/fator_param_ranges.csv",index_col = 0)
+        self.resetando = pd.read_csv("./tabelas/fator_param_ranges.csv",index_col = 0)
         # print(self.resetando)
         self.resetando["ON_OFF"] = True
-        
+
         if nominal != None and tipos_alvo != None:
             for nom in nominal:
                 self.resetando.loc[self.resetando["ParameterName"] == nom,"ON_OFF"] = False
@@ -90,12 +90,7 @@ class Funcionalidades():
 
         temp = df_esperado[df_esperado.columns.values[0]].values
         self.resetando["valores"] =temp
-        # print("parametros a seguir foram alterados:")
-        # print(self.resetando)
-
-        # self.resetando["ON_OFF"] = ~self.resetando["ON_OFF"].isin(tipos_alvo)
-        # print(self.SETTINGS_DIR)
-        settings_file = f"../settings.xml"
+        settings_file = "../settings.xml"
         
         
         for variavel,nome  in zip( self.resetando.loc[self.resetando.tipo == "xml","valores"],self.resetando.loc[self.resetando.tipo == "xml","ParameterName"]) : 
@@ -113,7 +108,7 @@ class Funcionalidades():
                  self.inicia(nome,tipo,variavel)
                  self.manipular()
     def reseta(self):
-        # print(self._d1ct)
+
         for chaves in self._dct.keys():
             entrada = self._dct[chaves]["entrada"]
             saida = self._dct[chaves]["saida"]
@@ -159,18 +154,28 @@ class Funcionalidades():
           temp2.to_netcdf("../catch/meteo/pr.nc")
      
     def seta_melhores_parametros(self,file=None,skip = False):
-        df = pd.read_csv("./tabelas/fator_param_ranges.csv",index_col = 0)
-        if file ==None:
-            file = "/home/felipe/Documentos/lf_pm/calibracao_manual/tabelas/resultados/plt_geral/11_9/primeiro teste serio.csv"
-        dx = pd.read_csv(file)
+         
         
-        if skip == False:
-            for parametro in dx.ParameterName:
-                df.loc[df.ParameterName == parametro,"DefaultValue"] = dx.loc[dx.ParameterName == parametro,dx.columns.values[-1]].values[0]
-        else:
-            df.DefaultValue = dx[dx.columns[-1]].values
+        file = "/home/felipe/Documentos/lf_pm/calibracao_manual/tabelas/melhor_resultado.csv"
+        df = pd.read_csv("/home/felipe/Documentos/lf_pm/calibracao_manual/calibrador_antigo/tabelas/fator_param_ranges.csv",index_col = 0)
+        dx = pd.read_csv(file)
+        df.DefaultValue = dx[dx.columns.values[-1]]
+        df.to_csv("/home/felipe/Documentos/lf_pm/calibracao_manual/tabelas/fator_param_ranges.csv",index=True)
+        # df = pd.read_csv("./tabelas/fator_param_ranges copia.csv")
+        # if file ==None:
+        #     file = "/home/felipe/Documentos/lf_pm/calibracao_manual/tabelas/melhor_resultado.csv"
+            
+        # dx = pd.read_csv(file)
+        
+        # if skip == False:
+            
+        #     for parametro in dx[dx.columns.values[0]]:
+        #         df.loc[df.ParameterName == parametro,"DefaultValue"] = dx.loc[dx[dx.columns.values[0]]== parametro,dx.columns.values[-1]].values[0]
+        #         print(df)
+        # else:
+        #     df.DefaultValue = dx[dx.columns[-1]].values
 
-        df.to_csv("./tabelas/fator_param_ranges.csv",index = True)
+        # df.to_csv("./tabelas/fator_param_ranges.csv",index = True)
         
    #%%
     def ajustar_dimensao_temporal(self,novo_ano,ano_final):
@@ -203,14 +208,14 @@ class Funcionalidades():
            data_selecionada.to_netcdf(caminho_novo_arquivo)
            print(f"Arquivo ajustado: {caminho_novo_arquivo}")
            
-    def calibra_humido(self,novo_ano,final_ano,r=0.2,m=1000):
-       caminho_arquivo = f"{self.SETTINGS_DIR}/compara_anos.xml"  # Substitua pelo caminho correto
+    def calibra_humido(self,novo_ano,final_ano,r=0.02,m=400):
+       caminho_arquivo = f"{self.SETTINGS_DIR}/settings.xml"  # Substitua pelo caminho correto
        self.ajustar_parametros_ano(caminho_arquivo, novo_ano,final_ano)
        self.ajustar_dimensao_temporal(novo_ano,final_ano)
-       self.reseta()
+       # self.reseta()
        # self.reseta_for_the_best()
        # self.define_ativos()
-       self.executa(f"calibracao_humido_{novo_ano}:{final_ano}",r,m)
+       self.executa("novo_umido metodologia antiga",r,m)
        
        df_esperado = pd.read_csv(self.place,index_col = 0)
        if len(df_esperado.columns) >1:
@@ -223,58 +228,28 @@ class Funcionalidades():
        
        self.erro(temp,substituir=True,recorta = False)
        
-       self.arquivo_saida = f"humido_{novo_ano}_{final_ano}"  
+       self.arquivo_saida = "novo_humido"  
        self.plota(plt_esp = "humido")           
              
-    def calibra_seco(self,novo_ano,final_ano,r=0.2,m=1000):
-        caminho_arquivo = f"{self.SETTINGS_DIR}/compara_anos.xml"  # Substitua pelo caminho correto
+    def calibra_seco(self,novo_ano,final_ano,r=0.02,m=400):
+        caminho_arquivo = f"{self.SETTINGS_DIR}/settings.xml"  # Substitua pelo caminho correto
         self.ajustar_parametros_ano(caminho_arquivo, novo_ano,final_ano)
         self.ajustar_dimensao_temporal(novo_ano,final_ano)
-        self.reseta()
+        # self.reseta()
         # self.reseta_for_the_best()
         # self.define_ativos()
-        self.executa(f"calibracao_seco_{novo_ano}:{final_ano}",r,m)
+        self.executa("novo seco metodologia antiga",r,m)
         df_esperado = pd.read_csv(self.place,index_col = 0)
         if len(df_esperado.columns) >1:
              df_esperado = df_esperado[df_esperado.columns[-1]].to_frame()
      
         temp = df_esperado[df_esperado.columns.values[0]].values
          
-        self.ajustar_parametros_ano(caminho_arquivo, "2022","2022")
-        self.ajustar_dimensao_temporal("2022","2022")
+        self.ajustar_parametros_ano(caminho_arquivo, "2021","2021")
+        self.ajustar_dimensao_temporal("2021","2021")
         
         self.erro(temp,substituir=True,recorta = False)
         
-        self.arquivo_saida = f"seco_{novo_ano}_{final_ano}"  
+        self.arquivo_saida = "novo_seco"  
         self.plota(plt_esp = "seco")    
        
-       
-       
-      
-    # 
-# if __name__ == "__main__":
-    # temp = Funcionalidades()
-    # temp.seta_melhores_parametros()
-    
-    # temp.reseta_for_the_best()
-    # import xml.etree.ElementTree as ET
-    
-    # caminho_arquivo = "/discolocal/felipe/lisflood_pm/compara_anos.xml"  # Substitua pelo caminho correto
-    
-    # tree = ET.parse(caminho_arquivo)
-    # root = tree.getroot()
-    
-    # novo_ano = "2017"  # Ano correspondente
-    
-    # for group_element in root.findall(".//group"):
-    #     for textvar_element in group_element.findall('textvar'):
-    #         var_nome = textvar_element.get('name')
-    #         if var_nome == "CalendarDayStart" or var_nome == "timestepInit" or var_nome == "StepStart":
-    #             textvar_element.set('value', novo_ano + "-01-01 00:00")
-    #         elif var_nome == "StepEnd":
-    #             if novo_ano == "2023":
-    #                 textvar_element.set('value', "2023-07-04 00:00")
-    #             else:
-    #                 textvar_element.set('value', novo_ano + "-12-31 00:00")
-    
-    # tree.write(caminho_arquivo)

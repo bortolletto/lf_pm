@@ -11,7 +11,11 @@ import pandas as pd
 import datetime 
 import os 
 data_hoje = datetime.date.today()
+start="2013-01-03 00:00:00"
+end = "2023-04-09 00:00:00"
 
+# start="2013-01-03 00:00:00"
+# end = "2015-12-31 00:00:00"
 def nse(predictions, targets):
     return (1-(np.sum((targets-predictions)**2)/np.sum((targets-np.mean(targets))**2)))
             
@@ -24,7 +28,7 @@ lista = []
 for i in sim["1"]:
     valor = i.split()[1]
     lista.append(float(valor))
-data = pd.date_range(start="2013-01-03 00:00:00",end = "2023-04-09 00:00:00",freq = "D" )
+data = pd.date_range(start=start,end = end,freq = "D" )
 df = pd.DataFrame(index = data)
 df["ls_dis"] = lista
 # temp = pd.read_csv("/discolocal/felipe/lisflood_pm/vazoes_observadas/results/1_9/ultimo_vazao.csv",index_col = 0)
@@ -38,6 +42,12 @@ obs = obs.resample("D", closed='left', label='left').agg({'horleitura':(np.mean)
 df = pd.merge(df,obs,left_index= True,right_index= True)
 
 df = df["2013-01-01":"2023-04-07"]
+#%%df
+import plotly.io as pio
+#pio.renderers.default = 'svg'
+pio.renderers.default = 'browser'
+
+
 nash = nse(df["ls_dis"],df["horleitura"])
 fig = go.Figure()
 
@@ -52,7 +62,8 @@ if not os.path.exists(pasta):
     print(f"Pasta '{pasta}' criada com sucesso.")
 else:
     print(f"A pasta '{pasta}' já existe.")
-fig.write_html(f"{pasta}/sem evapo.html")
+fig.show()
+# fig.write_html(f"{pasta}/3 anos.html")
 
 
 #%%

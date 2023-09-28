@@ -57,7 +57,9 @@ class rodando(Altera_Xml):
         -------
         None.
 
+
         '''
+  
         for arquivo in self.files:
                self.dataset = xr.open_dataset(f"{self.diretorio_entrada}{arquivo}")
                self.name_var = list(self.dataset.variables)[-1]     
@@ -102,7 +104,7 @@ class rodando(Altera_Xml):
           # Fbest =  abs(1 - fobj(X0))
           # Passo 3
           for i in tqdm(I):
-              print(i)
+              # print(i)
               Pi = 1 - np.log(i)/np.log(m)
               P = np.random.rand(len(Xmin))
               N = np.where(P < Pi)[0]
@@ -130,10 +132,11 @@ class rodando(Altera_Xml):
                   #     Xnew[j] = matriz
               # Passo 5
               Fnew = fobj(Xnew)
+              print(Fbest)
               if Fnew <= Fbest:
                   Fbest = Fnew
                   Xbest = np.copy(Xnew)
-                  print(Fbest)
+
                   if hasattr(self, 'pasta') and isinstance(self.pasta, str):
                         pass
                   else:
@@ -146,9 +149,11 @@ class rodando(Altera_Xml):
                   if not os.path.exists(self.place):
                       self.resultados = pd.DataFrame()
                       self.resultados.index = self.nomes_paramns.ParameterName
+    
                       # print(self.nomes_paramns.DefaultValue)
                       self.resultados["default"] = self.nomes_paramns.DefaultValue.values
-                      self.resultados.to_csv(self.place)                      
+                      self.resultados.to_csv(self.place)          
+                  
                   self.resultados = pd.read_csv(self.place,index_col = 0)
                   self.resultados[Fbest] = Xbest
                   self.resultados.to_csv(self.place)                 
@@ -183,8 +188,10 @@ class rodando(Altera_Xml):
         for i in sim["1"]:
             valor = i.split()[1]
             lista.append(float(valor))
-        if len(lista) <= 3000:
+        if 367<=len(lista) <= 3000:
             data = pd.date_range(start=self.data_inicial,end = self.data_final,freq = "D" )
+        elif len(lista) <= 366:
+            data = pd.date_range(start="2022-01-01 00:00:00",end = "2022-12-31 00:00:00",freq = "D" )
         else:
             data = pd.date_range(start="2013-01-03 00:00:00",end = "2023-04-09 00:00:00",freq = "D" )
         

@@ -42,10 +42,12 @@ class Calibrador(rodando,Funcionalidades):
 
         '''
         
-        self.dataframe = pd.read_csv(f"{self.FILE_DIR}tabelas/tabela.csv",index_col = 0)
+        # self.dataframe = pd.read_csv(f"{self.FILE_DIR}tabelas/tabela.csv",index_col = 0)
+        self.dataframe = pd.read_csv("./tabelas/fator_param_ranges.csv",index_col = 0)
+        # print(self.dataframe)
         # print(self.dataframe)
         dct = {}
-        for nome ,tipo in zip(self.dataframe.index,self.dataframe.tipo):
+        for nome ,tipo in zip(self.dataframe.ParameterName,self.dataframe.tipo):
             if tipo == "landuse":
                 entrada = f"{self.IN_DIR}/{tipo}/"
                 saida =  f"{self.OUT_DIR}/maps/{tipo}/"
@@ -55,19 +57,14 @@ class Calibrador(rodando,Funcionalidades):
             elif tipo == "table2map":
                 entrada = f"{self.IN_DIR}/{tipo}/{nome}/"
                 saida =  f"{self.OUT_DIR}/{tipo}/"
-                
+            elif tipo == "xml":
+                continue 
             dct[nome] =  {"tipo":tipo,
                          "entrada": entrada,
                          "saida":saida,
                          "ON_OFF" : True
                          }
-            
-        dct["cropgrpn"] = {
-            "tipo":"table2map",
-            "entrada": f"{self.IN_DIR}/{tipo}/",
-            "saida":  f"{self.OUT_DIR}/maps/{tipo}/",
-            "ON_OFF":False
-            }
+      
         self._dct = dct
 
     def define_ativos(self,nominal=None,tipos_alvo=None):
@@ -88,7 +85,7 @@ class Calibrador(rodando,Funcionalidades):
               
           self.nomes_paramns = self.nomes_paramns[self.nomes_paramns["ON_OFF"]==True]
           print("os seguintes parametros serão calibrados:")
-          # print(self.nomes_paramns)
+          print(self.nomes_paramns)
           self.lower = self.nomes_paramns["MinValue"]
           self.upper = self.nomes_paramns["MaxValue"]
               
@@ -113,24 +110,40 @@ class Calibrador(rodando,Funcionalidades):
         
         self.xbest_f,self.fbest_f= self.dds(self.lower,self.upper,super().erro,r,m)
         self.plota()
-        
-
+    def altera_data(self,novo_ano,final_ano,caminho_arquivo = None):
+        if caminho_arquivo == None:
+            caminho_arquivo = "../settings.xml"
+            
+            temp.ajustar_parametros_ano(caminho_arquivo, novo_ano,final_ano)
+            temp.ajustar_dimensao_temporal(novo_ano,final_ano)
+    
         #%%
 if __name__ == "__main__":
-    import xarray as xr
     temp = Calibrador()
     temp.inicializar()
     temp.reseta()
     temp.reseta_for_the_best()
+    # temp.seta_melhores_parametros()
     temp.define_ativos()
+    
     # df_chuva = pd.read_csv("./tabelas/chuva_editada.csv",index_col = 0,parse_dates = True)
     # df_chuva = df_chuva.media.to_frame()
     # temp.define_nova_chuva(df_chuva)
-    temp.calibra_humido("2013","2015")
-    # temp.calibra_seco("2013","2015")
-    # temp.executa("aplicando dds para toda a fora soilhyd",m =3500)
     
-
+    
+    # temp.calibra_humido("2013","2015")
+    # temp.calibra_seco("2016","2020")
+    temp.executa("Nas origines",r = 0.02,m =1000)
+    
+    # temp.reseta()
+    # temp.reseta_for_the_best()
+    # temp.define_ativos()
+    # temp.calibra_humido("2013","2015")
+    # temp.calibra_seco("2016","2020")
+    a,b,c = temp.cria_super_csv()
+    
+    
+    
     
 
 # df = pd.read_csv("./tabelas/resultados/plt_geral/13_9/testando somente com theta_sr.csv")
