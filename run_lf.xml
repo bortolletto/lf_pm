@@ -22,7 +22,7 @@
     <setoption choice="0" name="simulateLakes" />
     <setoption choice="0" name="simulateReservoirs" />
 
-    <setoption choice="0" name="SplitRouting" />
+    <setoption choice="1" name="SplitRouting" />
 
     # use inflow data
     <setoption choice="0" name="inflow" />
@@ -67,27 +67,26 @@
     <setoption choice="1" name="repEndMaps" />
 
     # report maps
-    <setoption choice="1" name="repDischargeMaps" />
+    <setoption choice="0" name="repDischargeMaps" />
     <setoption choice="1" name="repSurfaceRunoffMaps" />
     <setoption choice="1" name="repTotalRunoffMaps" />
-    <setoption choice="1" name="repPrefFlowMaps" />
-    <setoption choice="1" name="repTaMaps" />
-    <setoption choice="1" name="repRainMaps" />
+    <setoption choice="0" name="repPrefFlowMaps" />
+    <setoption choice="0" name="repTaMaps" />
+    <setoption choice="0" name="repRainMaps" />
     <setoption choice="0" name="repSnowMaps" />
-    <setoption choice="1" name="repSnowCoverMaps" />
+    <setoption choice="0" name="repSnowCoverMaps" />
     <setoption choice="0" name="repSnowMeltMaps" />
-    <setoption choice="1" name="repThetaMaps" />
-    <setoption choice="1" name="repThetaForestMaps" />
-    <setoption choice="1" name="repLZMaps" />
-    <setoption choice="1" name="repUZMaps" />
-    <setoption choice="1" name="repGwPercUZLZMaps" />
-    <setoption choice="1" name="repPercolationMaps" />
-    <setoption choice="1" name="repRWS" />
-    <setoption choice="1" name="repPFMaps" />
-
+    <setoption choice="0" name="repThetaMaps" />
+    <setoption choice="0" name="repThetaForestMaps" />
+    <setoption choice="0" name="repLZMaps" />
+    <setoption choice="0" name="repUZMaps" />
+    <setoption choice="0" name="repGwPercUZLZMaps" />
+    <setoption choice="0" name="repPercolationMaps" />
+    <setoption choice="0" name="repRWS" />
+    <setoption choice="0" name="repPFMaps" />
     <setoption choice="1" name="repTotalAbs" />
-    <setoption choice="1" name="repTotalWUse" />
-    <setoption choice="1" name="repWIndex" />
+    <setoption choice="0" name="repTotalWUse" />
+    <setoption choice="0" name="repWIndex" />
 
 </lfoptions>
 
@@ -332,7 +331,7 @@ CALIBRATION PARAMETERS
 with .nc format: than working with smaller sub-areas is possible
 **************************************************************
 </comment>
-<textvar name="UpperZoneTimeConstant" value="19.06904739062009">
+<textvar name="UpperZoneTimeConstant" value="8.986268312139105">
 <comment>
 default: 10
 $(PathParams)/params_UpperZoneTimeConstant.nc
@@ -342,7 +341,7 @@ if we had a stationary system (average inflow=average outflow)
 </comment>
 </textvar>
 
-<textvar name="LowerZoneTimeConstant" value="5062.981552549935">
+<textvar name="LowerZoneTimeConstant" value="2540.5222286567573">
 <comment>
 default: 100
 $(PathParams)/params_LowerZoneTimeConstant.nc
@@ -352,7 +351,7 @@ if we had a stationary system (average inflow=average outflow)
 </comment>
 </textvar>
 
-<textvar name="GwPercValue" value="0.9527050126122626">
+<textvar name="GwPercValue" value="0.2042084431463395">
 <comment>
 default: 0.5
 $(PathParams)/params_GwPercValue.nc
@@ -371,7 +370,7 @@ A value of 0 (closed lower boundary) is recommended as a starting value.
 </comment>
 </textvar>
 
-<textvar name="LZThreshold" value="12.52853668386262">
+<textvar name="LZThreshold" value="12.492190273012634">
 <comment>
 threshold value [mm] of the water storage in the lower groundwater zone. 
 If the water storage in the lower groundwater zone  decreases below LZThreshold,
@@ -379,7 +378,7 @@ the flow from the lower zone to the nearby rivers (base-flow) stops.
 </comment>
 </textvar>
 
-<textvar name="b_Xinanjiang" value="2.5717532482653027">
+<textvar name="b_Xinanjiang" value="2.5655273354784933">
 <comment>
 default: 0.7 [-]
 $(PathParams)/params_b_Xinanjiang.nc
@@ -387,7 +386,7 @@ Power in Xinanjiang distribution function [-]
 </comment>
 </textvar>
 
-<textvar name="PowerPrefFlow" value="4.365985571010213">
+<textvar name="PowerPrefFlow" value="4.920402105156972">
 <comment>
 default: 3.5 [-]
 $(PathParams)/params_PowerPrefFlow.nc
@@ -396,7 +395,7 @@ flow with increased soil moisture storage [-]
 </comment>
 </textvar>
 
-<textvar name="CalChanMan" value="1.3050710466279036">
+<textvar name="CalChanMan" value="1.9009717292931865">
 <comment>
 default: 2.0 [-]
 $(PathParams)/params_CalChanMan1.nc
@@ -404,7 +403,7 @@ Multiplier [-] applied to Channel Manning's n
 </comment>
 </textvar>
 
-<textvar name="SnowMeltCoef" value="4.481536289096493">
+<textvar name="SnowMeltCoef" value="4.774950725124599">
 <comment>
 default: 4.0 [mm C-1 day-1]
 $(PathParams)/params_SnowMeltCoef.nc
@@ -413,7 +412,7 @@ See also Martinec et al., 1998.
 </comment>
 </textvar>
 
-<textvar name="CalChanMan2" value="3.1282566243314367">
+<textvar name="CalChanMan2" value="3.0385330293345714">
 <comment>
 default: 3.0 [-]
 $(PathParams)/params_CalChanMan2.nc
@@ -421,7 +420,7 @@ Multiplier [-] applied to Channel Manning's n for second line of routing
 </comment>
 </textvar>
 
-<textvar name="LakeMultiplier" value="1.2427421601689692">
+<textvar name="LakeMultiplier" value="1.7474212305968166">
 <comment>
 default: 1.0 [-]
 $(PathParams)/params_LakeMultiplier.nc
@@ -429,7 +428,7 @@ Multiplier applied to the lake parameter A
 </comment>
 </textvar>
 
-<textvar name="adjust_Normal_Flood" value="0.5370564012862018">
+<textvar name="adjust_Normal_Flood" value="0.4900367554056728">
 <comment>
 default: 0.8 [-]
 $(PathParams)/params_adjust_Normal_Flood.nc
@@ -439,7 +438,7 @@ Range 0.01 - 0.99
 </comment>
 </textvar>
 
-<textvar name="ReservoirRnormqMult" value="0.9985941722186032">
+<textvar name="ReservoirRnormqMult" value="1.96637718581027">
 <comment>
 default: 1.0 [-]
 $(PathParams)/params_ReservoirRnormqMult.nc
@@ -448,7 +447,7 @@ fraction of the value in table rnormq.txt range: 0.5 - 2
 </comment>
 </textvar>
 
-<textvar name="AvWaterRateThreshold" value="56.32653823310837">
+<textvar name="AvWaterRateThreshold" value="62.01703650606643">
 <comment>
 default: 5.0 [mm/day] (not included in calibration)
 Critical amount of available water (expressed in [mm/day]!), above which 'Days Since Last Rain' parameter is
@@ -456,7 +455,7 @@ set to 1
 </comment>
 </textvar>
 
-<textvar name="QSplitMult" value="9.5292585023991">
+<textvar name="QSplitMult" value="10.83461029463512">
 <comment>
 PBchange
 Multiplier applied to average Q to split into a second line of routing
@@ -464,20 +463,20 @@ THIS NEEDS TO BE AMENDED BY ADDING THE RIGHT PATH TO $(PathParams)
 </comment>
 </textvar>
 
-<textvar name="ChanBottomWMult" value="2.5325864609413093">
+<textvar name="ChanBottomWMult" value="1.9069342909224078">
 <comment>
 PBchange
 Multiplier applied to ChanBottomWidth
 </comment>
 </textvar>
 
-<textvar name="ChanDepthTMult" value="2.511498967710857">
+<textvar name="ChanDepthTMult" value="2.6975072421039834">
 <comment>
 Multiplier [] applied to ChanDepthThreshold
 </comment>
 </textvar>
 
-<textvar name="ChanSMult" value="2.5067811136207565">
+<textvar name="ChanSMult" value="3.306703718343398">
 <comment>
 Multiplier []  applied to ChanSdXdY
 </comment>
@@ -2113,7 +2112,7 @@ INITIAL CONDITIONS FOR THE WATER BALANCE MODEL
 **************************************************************
 </comment>
 
-<textvar name="LZAvInflowMap" value="$(PathOut)/lzavin.nc">
+<textvar name="LZAvInflowMap" value="$(PathOut)/lzavin">
 <comment>
 $(PathOut)/lzavin.nc
 Reported map of average percolation rate from upper to
@@ -2121,7 +2120,7 @@ lower groundwater zone (reported for end of simulation) [mm/day]
 </comment>
 </textvar>
 
-<textvar name="AvgDis" value="$(PathMaps)/avgdis.nc">
+<textvar name="AvgDis" value="$(PathOut)/avgdis">
 <comment>
 $(PathMaps)/avgdis.nc
 $(PathInit)/avgdis.nc

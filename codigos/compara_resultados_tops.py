@@ -12,7 +12,7 @@ import datetime
 import os 
 data_hoje = datetime.date.today()
 start="2013-01-03 00:00:00"
-end = "2023-04-09 00:00:00"
+end = "2020-12-31 00:00:00"
 
 # start="2013-01-03 00:00:00"
 # end = "2015-12-31 00:00:00"
@@ -30,18 +30,19 @@ for i in sim["1"]:
     lista.append(float(valor))
 data = pd.date_range(start=start,end = end,freq = "D" )
 df = pd.DataFrame(index = data)
-df["ls_dis"] = lista
+df["ls_dis"] = lista[:-2]
+
 # temp = pd.read_csv("/discolocal/felipe/lisflood_pm/vazoes_observadas/results/1_9/ultimo_vazao.csv",index_col = 0)
 # df["ls_dis"] = temp["vazao_25334953_Porto Amazonas"].values
 # obs = pd.read_csv("/discolocal/felipe/Progamas/coleta_dados/coleta/mapas_tcc/vazao/vazao_25334953_Porto Amazonas.csv",index_col = 0,parse_dates=True)
 # obs.drop(columns = ["horqualidade"],inplace = True)
 obs = pd.read_csv("../calibracao_manual/tabelas/pm_vazao_obs.csv",index_col = 0,parse_dates=True)
-obs = obs["2013-01-01":"2023-04-07"]
+obs = obs[start:end]
 obs = obs.resample("D", closed='left', label='left').agg({'horleitura':(np.mean)})
 
 df = pd.merge(df,obs,left_index= True,right_index= True)
 
-df = df["2013-01-01":"2023-04-07"]
+df = df[start:end]
 # df = df[20:]
 #%%df
 import plotly.io as pio
@@ -65,10 +66,14 @@ if not os.path.exists(pasta):
     print(f"Pasta '{pasta}' criada com sucesso.")
 else:
     print(f"A pasta '{pasta}' já existe.")
-    
+from sklearn.metrics import mean_squared_error  
+temp = df.fillna(0)
+MSE = mean_squared_error(temp["horleitura"], temp["ls_dis"])
+RMSE = np.sqrt(MSE)
 print(kge)
+print(RMSE)
 fig.show()
-# fig.write_html(f"{pasta}/3 anos.html")
+# fig.write_html(f"{pasta}/vc é o cara bortao.html")
 
 
 #%%plotar evapo:
@@ -90,13 +95,13 @@ fig.show()
 # os.remove("/discolocal/felipe/LF_pratico/lisflood/porto_amazonas copia/catch/table2map/soildepth2_f.nc")
 # df.to_netcdf("/discolocal/felipe/LF_pratico/lisflood/porto_amazonas copia/catch/table2map/soildepth2_f.nc")
 
-import xarray as xr
+# import xarray as xr
 
-df = xr.open_dataset("/discolocal/felipe/git_pm/catch/ec_ldd1.nc")
-df = df.drop("spatial_ref")
-df.loc[{"y":7166615.942,"x":620148.259}]= 9 
-df.loc[{"y":7161615.942,"x":620148.259}]= 9 
-df.loc[{"y":7156615.942,"x":620148.259}]= 9 
-df.to_netcdf("/discolocal/felipe/git_pm/catch/ec_ldd2.nc")
-teste = df.to_dataframe().reset_index().pivot(index="y",columns = "x", values = "band_data")
-teste = teste[::-1]
+# df = xr.open_dataset("/discolocal/felipe/git_pm/catch/ec_ldd1.nc")
+# df = df.drop("spatial_ref")
+# df.loc[{"y":7166615.942,"x":620148.259}]= 9 
+# df.loc[{"y":7161615.942,"x":620148.259}]= 9 
+# df.loc[{"y":7156615.942,"x":620148.259}]= 9 
+# df.to_netcdf("/discolocal/felipe/git_pm/catch/ec_ldd2.nc")
+# teste = df.to_dataframe().reset_index().pivot(index="y",columns = "x", values = "band_data")
+# teste = teste[::-1]

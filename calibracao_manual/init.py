@@ -88,6 +88,7 @@ class Calibrador(rodando,Funcionalidades):
           print(self.nomes_paramns)
           self.lower = self.nomes_paramns["MinValue"]
           self.upper = self.nomes_paramns["MaxValue"]
+          self.X0 = self.nomes_paramns["DefaultValue"]
               
     def ler_parametros(self):
         self.nomes_paramns = pd.read_csv(f"{self.FILE_DIR}tabelas/fator_param_ranges.csv",index_col = 0)
@@ -108,7 +109,7 @@ class Calibrador(rodando,Funcionalidades):
         self.arquivo_saida = arquivo_saida
         self.resultados = pd.DataFrame() 
         
-        self.xbest_f,self.fbest_f= self.dds(self.lower,self.upper,super().erro,r,m)
+        self.xbest_f,self.fbest_f= self.dds(self.lower,self.upper,self.X0,super().erro,r,m)
         self.plota()
     def altera_data(self,novo_ano,final_ano,caminho_arquivo = None):
         if caminho_arquivo == None:
@@ -123,30 +124,29 @@ if __name__ == "__main__":
     temp.inicializar()
     temp.reseta()
     temp.reseta_for_the_best()
-    # temp.seta_melhores_parametros()
-    # temp.define_ativos()
-    
-    df_chuva = pd.read_csv("./tabelas/chuva_editada.csv",index_col = 0,parse_dates = True)
-    df_chuva = df_chuva.media.to_frame()
+    temp.seta_melhores_parametros()
+    temp.define_ativos()
+    temp.manipular()
+    # df_chuva = pd.read_csv("./tabelas/chuva_editada.csv",index_col = 0,parse_dates = True)
+    # df_chuva = df_chuva.media.to_frame()
     # df_chuva = pd.read_csv("/discolocal/felipe/git_pm/codigos/chuva_simepar/new_rain/chuva_media.csv",index_col = 0,parse_dates = True)
     # df_chuva = df_chuva["2013":"2023-04-07"]
     # df_chuva.rename(columns = {"0":"media"},inplace = True)
-    temp.define_nova_chuva(df_chuva)
+    # temp.define_nova_chuva(df_chuva)
     
     
     # temp.calibra_humido("2013","2015")
     # temp.calibra_seco("2016","2020")
-    # temp.executa("Nas origines",r = 0.02,m =1000)
+    temp.altera_data("2013", "2020")
+    temp.executa("2013-2020 KGE",r = 0.02,m =5000)
     
     # temp.reseta()
     # temp.reseta_for_the_best()
     # temp.define_ativos()
     # temp.calibra_humido("2013","2015")
     # temp.calibra_seco("2016","2020")
-    a,b,c = temp.cria_super_csv()
-    
-    
-    
+    # a,b,c = temp.cria_super_csv()
+
 
     
     

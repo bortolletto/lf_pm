@@ -88,7 +88,7 @@ class rodando(Altera_Xml):
                self.dataset.to_netcdf(f"{self.diretorio_saida}{arquivo}")
  #%% 
  ######################## old dds ###############################
-    def dds(self,Xmin, Xmax, fobj, r=0.2, m=1000):
+    def dds(self,Xmin, Xmax,X0, fobj, r=0.2, m=1000):
           # Passo 1
 
           Xmin = np.asarray(Xmin)
@@ -162,7 +162,7 @@ class rodando(Altera_Xml):
     
     ######################## old dds ###############################   
     #%%
-    def nash(self,kge = False):
+    def nash(self,kge = True):
         if kge == False:
             self.df_merged = pd.merge(self.df,self._obs,left_index= True,right_index= True)
             targets = self.df_merged["horleitura"]

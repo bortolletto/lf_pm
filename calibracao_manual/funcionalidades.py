@@ -156,11 +156,11 @@ class Funcionalidades():
     def seta_melhores_parametros(self,file=None,skip = False):
          
         
-        file = "/home/felipe/Documentos/lf_pm/calibracao_manual/tabelas/melhor_resultado.csv"
-        df = pd.read_csv("/home/felipe/Documentos/lf_pm/calibracao_manual/calibrador_antigo/tabelas/fator_param_ranges.csv",index_col = 0)
+        file = "/discolocal/felipe/git_pm/calibracao_manual/tabelas/resultados/plt_geral/28_9/voltando as origens e funcionando.csv"
+        df = pd.read_csv("./tabelas/fator_param_ranges.csv",index_col = 0)
         dx = pd.read_csv(file)
         df.DefaultValue = dx[dx.columns.values[-1]]
-        df.to_csv("/home/felipe/Documentos/lf_pm/calibracao_manual/tabelas/fator_param_ranges.csv",index=True)
+        df.to_csv("./tabelas/fator_param_ranges.csv",index=True)
         # df = pd.read_csv("./tabelas/fator_param_ranges copia.csv")
         # if file ==None:
         #     file = "/home/felipe/Documentos/lf_pm/calibracao_manual/tabelas/melhor_resultado.csv"
