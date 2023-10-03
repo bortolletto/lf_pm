@@ -138,7 +138,7 @@ class rodando(Altera_Xml):
                   Xbest = np.copy(Xnew)
 
                   if hasattr(self, 'pasta') and isinstance(self.pasta, str):
-                        pass
+                        "Felipe vc é demais , tome água e coma uma banana!"
                   else:
                       data_hoje = datetime.date.today()
                       local_pasta = f"{self.FILE_DIR}tabelas/resultados/plt_geral/"

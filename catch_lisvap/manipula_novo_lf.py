@@ -199,11 +199,7 @@ print(tempmax.describe())
 
 vento = pd.read_csv("./nova_resoc/vento.csv",index_col = 0,parse_dates = True)
 vento = vento .mean(axis = 1).to_frame()
-
 print(vento.describe())
-
-
-
 rad = pd.read_csv("./nova_resoc/rad.csv",index_col = 0,parse_dates = True)
 rad = rad.sum(axis = 1).to_frame()
 

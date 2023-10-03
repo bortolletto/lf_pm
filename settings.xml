@@ -22,7 +22,7 @@
     <setoption choice="0" name="simulateLakes" />
     <setoption choice="0" name="simulateReservoirs" />
 
-    <setoption choice="0" name="SplitRouting" />
+    <setoption choice="1" name="SplitRouting" />
 
     # use inflow data
     <setoption choice="0" name="inflow" />
@@ -32,7 +32,7 @@
 
     # option to initialize Lisflood
     <setoption choice="1" name="InitLisflood" />
-    <setoption choice="1" name="InitLisfloodwithoutsplit" />
+    <setoption choice="0" name="InitLisfloodwithoutsplit" />
 
     # option to read/write NetCDF
     <setoption choice="1" name="readNetcdfStack" />
@@ -49,7 +49,7 @@
     # report gauges and sites
     <setoption choice="0" name="repStateSites" />
     <setoption choice="0" name="repRateSites" />
-    <setoption choice="1" name="repStateUpsGauges" />
+    <setoption choice="0" name="repStateUpsGauges" />
     <setoption choice="0" name="repRateUpsGauges" />
     <setoption choice="0" name="repMeteoUpsGauges" />
 
@@ -64,10 +64,10 @@
     <setoption choice="0" name="repStateMaps" />
 
     # report end maps
-    <setoption choice="1" name="repEndMaps" />
+    <setoption choice="0" name="repEndMaps" />
 
     # report maps
-    <setoption choice="1" name="repDischargeMaps" />
+    <setoption choice="0" name="repDischargeMaps" />
     <setoption choice="0" name="repSurfaceRunoffMaps" />
     <setoption choice="0" name="repTotalRunoffMaps" />
     <setoption choice="0" name="repPrefFlowMaps" />
@@ -240,7 +240,7 @@ Calendar convention
 </comment>
 </textvar>
 
-<textvar name="CalendarDayStart" value="01/01/2013 00:00">
+<textvar name="CalendarDayStart" value="2013-01-01 00:00">
 <comment>
 Reference day and time
 </comment>
@@ -261,13 +261,13 @@ Within the model,the smallest out of DtSecChannel and DtSec is used
 </comment>
 </textvar>
 
-<textvar name="StepStart" value="01/01/2013 00:00">
+<textvar name="StepStart" value="2013-01-01 00:00">
 <comment>
 Number of first time step in simulation
 </comment>
 </textvar>
 
-<textvar name="StepEnd" value="07/04/2023 00:00">
+<textvar name="StepEnd" value="2020-12-31 00:00">
 <comment>
 Number of last time step in simulation
 </comment>
@@ -332,7 +332,7 @@ CALIBRATION PARAMETERS
 with .nc format: than working with smaller sub-areas is possible
 **************************************************************
 </comment>
-<textvar name="UpperZoneTimeConstant" value="11.922106635666184">
+<textvar name="UpperZoneTimeConstant" value="19.84532894341585">
 <comment>
 default: 10
 $(PathParams)/params_UpperZoneTimeConstant.nc
@@ -342,7 +342,7 @@ if we had a stationary system (average inflow=average outflow)
 </comment>
 </textvar>
 
-<textvar name="LowerZoneTimeConstant" value="69.7852359641041">
+<textvar name="LowerZoneTimeConstant" value="5284.371997473606">
 <comment>
 default: 100
 $(PathParams)/params_LowerZoneTimeConstant.nc
@@ -352,7 +352,7 @@ if we had a stationary system (average inflow=average outflow)
 </comment>
 </textvar>
 
-<textvar name="GwPercValue" value="1.0119828584597008">
+<textvar name="GwPercValue" value="1.0282664455972192">
 <comment>
 default: 0.5
 $(PathParams)/params_GwPercValue.nc
@@ -361,7 +361,7 @@ response box [mm/day]
 </comment>
 </textvar>
 
-<textvar name="GwLoss" value="0.0014600179527613">
+<textvar name="GwLoss" value="0.0">
 <comment>
 default: 0.0
 $(PathParams)/params_GwLoss.nc
@@ -371,7 +371,7 @@ A value of 0 (closed lower boundary) is recommended as a starting value.
 </comment>
 </textvar>
 
-<textvar name="LZThreshold" value="6.223752043179625">
+<textvar name="LZThreshold" value="15.39674071027439">
 <comment>
 threshold value [mm] of the water storage in the lower groundwater zone. 
 If the water storage in the lower groundwater zone  decreases below LZThreshold,
@@ -379,7 +379,7 @@ the flow from the lower zone to the nearby rivers (base-flow) stops.
 </comment>
 </textvar>
 
-<textvar name="b_Xinanjiang" value="2.2385336886122538">
+<textvar name="b_Xinanjiang" value="2.5160129170478296">
 <comment>
 default: 0.7 [-]
 $(PathParams)/params_b_Xinanjiang.nc
@@ -387,7 +387,7 @@ Power in Xinanjiang distribution function [-]
 </comment>
 </textvar>
 
-<textvar name="PowerPrefFlow" value="1.2476515280437794">
+<textvar name="PowerPrefFlow" value="4.346089526105771">
 <comment>
 default: 3.5 [-]
 $(PathParams)/params_PowerPrefFlow.nc
@@ -396,7 +396,7 @@ flow with increased soil moisture storage [-]
 </comment>
 </textvar>
 
-<textvar name="CalChanMan" value="1.8326268116987745">
+<textvar name="CalChanMan" value="1.2798271240901722">
 <comment>
 default: 2.0 [-]
 $(PathParams)/params_CalChanMan1.nc
@@ -404,7 +404,7 @@ Multiplier [-] applied to Channel Manning's n
 </comment>
 </textvar>
 
-<textvar name="SnowMeltCoef" value="4.848677595230577">
+<textvar name="SnowMeltCoef" value="4.60603918325917">
 <comment>
 default: 4.0 [mm C-1 day-1]
 $(PathParams)/params_SnowMeltCoef.nc
@@ -413,7 +413,7 @@ See also Martinec et al., 1998.
 </comment>
 </textvar>
 
-<textvar name="CalChanMan2" value="2.832888310835467">
+<textvar name="CalChanMan2" value="2.643060281065">
 <comment>
 default: 3.0 [-]
 $(PathParams)/params_CalChanMan2.nc
@@ -421,7 +421,7 @@ Multiplier [-] applied to Channel Manning's n for second line of routing
 </comment>
 </textvar>
 
-<textvar name="LakeMultiplier" value="0.9139501522033436">
+<textvar name="LakeMultiplier" value="1.2790534563297777">
 <comment>
 default: 1.0 [-]
 $(PathParams)/params_LakeMultiplier.nc
@@ -429,7 +429,7 @@ Multiplier applied to the lake parameter A
 </comment>
 </textvar>
 
-<textvar name="adjust_Normal_Flood" value="0.5378447935902333">
+<textvar name="adjust_Normal_Flood" value="0.5431833843316286">
 <comment>
 default: 0.8 [-]
 $(PathParams)/params_adjust_Normal_Flood.nc
@@ -439,7 +439,7 @@ Range 0.01 - 0.99
 </comment>
 </textvar>
 
-<textvar name="ReservoirRnormqMult" value="1.3282476400637524">
+<textvar name="ReservoirRnormqMult" value="1.1352857160619063">
 <comment>
 default: 1.0 [-]
 $(PathParams)/params_ReservoirRnormqMult.nc
@@ -448,7 +448,7 @@ fraction of the value in table rnormq.txt range: 0.5 - 2
 </comment>
 </textvar>
 
-<textvar name="AvWaterRateThreshold" value="59.18207510865751">
+<textvar name="AvWaterRateThreshold" value="51.131707538486566">
 <comment>
 default: 5.0 [mm/day] (not included in calibration)
 Critical amount of available water (expressed in [mm/day]!), above which 'Days Since Last Rain' parameter is
@@ -456,7 +456,7 @@ set to 1
 </comment>
 </textvar>
 
-<textvar name="QSplitMult" value="10.693478554360276">
+<textvar name="QSplitMult" value="10.550135214868332">
 <comment>
 PBchange
 Multiplier applied to average Q to split into a second line of routing
@@ -464,20 +464,20 @@ THIS NEEDS TO BE AMENDED BY ADDING THE RIGHT PATH TO $(PathParams)
 </comment>
 </textvar>
 
-<textvar name="ChanBottomWMult" value="2.320530633360641">
+<textvar name="ChanBottomWMult" value="2.4314495125010662">
 <comment>
 PBchange
 Multiplier applied to ChanBottomWidth
 </comment>
 </textvar>
 
-<textvar name="ChanDepthTMult" value="2.7050421706100134">
+<textvar name="ChanDepthTMult" value="2.4883121798231134">
 <comment>
 Multiplier [] applied to ChanDepthThreshold
 </comment>
 </textvar>
 
-<textvar name="ChanSMult" value="3.0199585329815646">
+<textvar name="ChanSMult" value="2.5181866521122926">
 <comment>
 Multiplier []  applied to ChanSdXdY
 </comment>
@@ -591,7 +591,7 @@ INITIAL CONDITIONS
 **************************************************************
 </comment>
 
-<textvar name="timestepInit" value="01/01/2013 00:00">
+<textvar name="timestepInit" value="2013-01-01 00:00">
 <comment>
 if init. condition are stored as netCDF with different time steps
 this variable indicates which time step to use
@@ -1653,7 +1653,7 @@ Calendar convention
 </comment>
 </textvar>
 
-<textvar name="CalendarDayStart" value="$(CalendarDayStart)">
+<textvar name="CalendarDayStart" value="2013-01-01 00:00">
 <comment>
 Calendar day is back!
 Calendar day number of 1st day in model run
@@ -1675,13 +1675,13 @@ Within the model,the smallest out of DtSecChannel and DtSec is used
 </comment>
 </textvar>
 
-<textvar name="StepStart" value="$(StepStart)">
+<textvar name="StepStart" value="2013-01-01 00:00">
 <comment>
 Number of first time step in simulation
 </comment>
 </textvar>
 
-<textvar name="StepEnd" value="$(StepEnd)">
+<textvar name="StepEnd" value="2020-12-31 00:00">
 <comment>
 Number of last time step in simulation
 </comment>
@@ -2130,7 +2130,7 @@ Average discharge map [m3/s]
 </comment>
 </textvar>
 
-<textvar name="timestepInit" value="$(timestepInit)">
+<textvar name="timestepInit" value="2013-01-01 00:00">
 <comment>
 if init condition are stored as netCDF with different time steps
 this variable indicates which time step to use

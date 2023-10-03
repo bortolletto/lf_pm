@@ -155,8 +155,10 @@ class Funcionalidades():
      
     def seta_melhores_parametros(self,file=None,skip = False):
          
-        
-        file = "/discolocal/felipe/git_pm/calibracao_manual/tabelas/resultados/plt_geral/28_9/voltando as origens e funcionando.csv"
+        if file ==None:
+            file = "/discolocal/felipe/git_pm/calibracao_manual/tabelas/resultados/plt_geral/28_9/voltando as origens e funcionando.csv"
+        else:
+            file = file
         df = pd.read_csv("./tabelas/fator_param_ranges.csv",index_col = 0)
         dx = pd.read_csv(file)
         df.DefaultValue = dx[dx.columns.values[-1]]

@@ -138,8 +138,8 @@ if __name__ == "__main__":
     # temp.calibra_humido("2013","2015")
     # temp.calibra_seco("2016","2020")
     temp.altera_data("2013", "2020")
-    temp.executa("2013-2020 KGE",r = 0.02,m =5000)
-    
+    temp.executa("wtf_bro KGE",r = 0.02,m =5000)
+    "melhor resultado da rodada anteriror =0.3529255798088453"
     # temp.reseta()
     # temp.reseta_for_the_best()
     # temp.define_ativos()
