@@ -19,8 +19,9 @@ import plotly.io as pio
 pio.renderers.default = 'browser'
 
 data_hoje = datetime.date.today()
-start="2021-01-01 00:00:00"
-end = "2023-04-07 00:00:00"
+start="2013-01-01 00:00:00"
+end = "2021-12-31 00:00:00"
+# end = "2023-04-07 00:00:00"
 
 # start="2013-01-03 00:00:00"
 # end = "2015-12-31 00:00:00"
@@ -43,10 +44,13 @@ for i in sim["1"]:
     lista.append(float(valor))
 
 data = pd.date_range(start=start,end = end,freq = "D" )
+
 df = pd.DataFrame(index = data)
+df = df["2013":"2021"]
 df["ls_dis"] = lista
 df.ls_dis = df.ls_dis.shift(2)
 df = pd.merge(df,obs,left_index= True,right_index= True)
+
 log_nash = nse(np.log(df["ls_dis"]),np.log(df["horleitura"]))
 nash = nse(df["ls_dis"],df["horleitura"])
 df = df.fillna(df.mean())
@@ -66,7 +70,7 @@ def cp(df,nome):
     df = df[nome]
     valores_ordenados = df.sort_values().to_frame()
     n = len(valores_ordenados)
-    valores_ordenados["p"] = [(n-i+1)/(n+1) for i in range(n)]
+    valores_ordenados["p"] = [(n-i+1)/(n+1) for i in range(n)   ]
     valores_ordenados["p-1"] = 1 - valores_ordenados["p"]
     return valores_ordenados
 
@@ -79,23 +83,29 @@ fig.add_trace(go.Scatter(
     x = cp_sim.ls_dis,y = cp_sim.p,name = "simulado"
     ))
 fig.add_trace(go.Scatter(
-    x = cp_obs.horleitura,y = cp_obs.p,name = "simulado"
+    x = cp_obs.horleitura,y = cp_obs.p,name = "obs"
     ))
+fig.update_layout(title = f"periodo de {start.split('-')[0]}: {end.split('-')[0]}")
 fig.show()
+import xarray as xr
+from plotly.subplots import make_subplots
 
-fig = go.Figure()
-
-fig.add_trace(go.Scatter(x = df.index , y = df.ls_dis,name = f"simulado nash: {nash}",marker_color = "red"))
-fig.add_trace(go.Scatter(x= df.index,y=df.horleitura,name = "obs", marker_color = "black"))
-
+chuva = xr.open_dataset("../catch/meteo/pr.nc").to_dataframe()
+chuva =chuva.groupby("time").mean()
+fig = make_subplots(specs = [[ { "secondary_y" : True}]])
+fig.add_trace(go.Bar(x = chuva.index , y = chuva.pr,name = f"chuva",marker_color = "blue"),secondary_y=True)
+fig.add_trace(go.Scatter(x = df.index , y = df.ls_dis,name = f"simulado nash: {round(nash,2)}",marker_color = "red"),secondary_y=False)
+fig.add_trace(go.Scatter(x= df.index,y=df.horleitura,name = "obs", marker_color = "black"),secondary_y=False)
+fig.update_layout(title = f"periodo de {start.split('-')[0]}: {end.split('-')[0]}")
+fig["layout"]["yaxis2"]["autorange"] = "reversed"
 fig.show()
 # Imprima os resultados
-print("nash:",nash)
-print("log_nash",log_nash)
+print("nash:",round(nash,2))
+print("log_nash",round(log_nash,2))
 print("kge,r,alpha,beta:",kge,r,alpha,beta)
 print("Integral de A:", integral_A)
 print("Integral de B:", integral_B)
-print("Diferença entre as integrais:", diferenca)
+print("Diferença entre as integrais:", round(diferenca,2), "em porcentagem:", abs(diferenca/integral_B))
 
 print()
 print("--------------#---------------")
@@ -103,3 +113,42 @@ print()
 print(cp_sim.describe())
 print()
 print(cp_obs.describe())
+
+
+#%%
+df_place = "../calibracao_manual/tabelas/resultados/_01.csv"
+df = pd.read_csv(df_place,index_col = 0)
+nome = df_place.split("/")[-1]
+fig = go.Figure()   
+fig.add_trace(go.Scatter(x = df.index , y =  obs["horleitura"],name = "obs"))
+fora = []
+for coluna in df.columns:
+
+    merged = obs.horleitura.to_frame()
+    merged["ls_dis"] = df[coluna].values
+    targets = merged["horleitura"]
+    predictions = merged["ls_dis"]
+    nash_value = (1-(np.sum((targets-predictions)**2)/np.sum((targets-np.mean(targets))**2)))
+    print(nash_value)
+    dif = (abs(nash_value) - 0.299768776  )
+    if dif < 0.0003:
+        fora.append(coluna)
+    fig.add_trace(go.Scatter(x = df.index , y = df[coluna],name = f"{coluna} _>{nash_value}"))
+fig.show()
+ 
+fig =  go.Figure()
+fig.add_trace(go.Scatter(
+    x = cp_obs.horleitura,y = cp_obs.p,name = "obs"
+    ))
+fig.add_trace(go.Scatter(
+    x = cp_sim.ls_dis,y = cp_sim.p,name = "simulado"
+    ))
+for coluna in df.columns:
+    temp = cp(df,coluna)
+
+
+    fig.add_trace(go.Scatter(
+        x = temp[coluna],y = temp.p,name = coluna
+        ))
+    fig.update_layout(title = f"periodo de {start.split('-')[0]}: {end.split('-')[0]}")
+fig.show()
