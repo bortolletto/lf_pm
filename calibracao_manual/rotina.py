@@ -162,14 +162,16 @@ class rodando(Altera_Xml):
     
     ######################## old dds ###############################   
     #%%
-    def nash(self,kge = True):
+    def nash(self,kge = False):
         if kge == False:
             self.df_merged = pd.merge(self.df,self._obs,left_index= True,right_index= True)
             targets = self.df_merged["horleitura"]
             predictions = self.df_merged["ls_dis"]
             self.nome_grafico = "nash"
-            return ( 1 - np.sum((targets-predictions)**2)/np.sum((targets-np.mean(targets))**2))
-        
+            nash = np.sum((targets-predictions)**2)/np.sum((targets-np.mean(targets))**2)
+            print(nash)
+            return ( 1 - nash)
+            # return np.sum((targets-predictions)**2)/np.sum((targets-np.mean(targets))**2)
         elif kge == True:
             import hydroeval as he
             self.df_merged = pd.merge(self.df,self._obs,left_index= True,right_index= True)
@@ -177,8 +179,9 @@ class rodando(Altera_Xml):
             predictions = self.df_merged["ls_dis"]
             kge, r, alpha, beta = he.evaluator(he.kge, predictions, targets)
             self.nome_grafico = "KGE"
+            print(kge)
             return (1 - kge[0])
-    
+            # return kge[0]
 
 
     def ler_saida(self):
@@ -189,7 +192,7 @@ class rodando(Altera_Xml):
             valor = i.split()[1]
             lista.append(float(valor))
         if 367<=len(lista) <= 3000:
-            data = pd.date_range(start=self.data_inicial,end = self.data_final,freq = "D" )
+            data = pd.date_range(start=self.novo_ano,end = self.ano_final,freq = "D" )
         elif len(lista) <= 366:
             data = pd.date_range(start="2022-01-01 00:00:00",end = "2022-12-31 00:00:00",freq = "D" )
         else:
@@ -199,7 +202,7 @@ class rodando(Altera_Xml):
         self.df["ls_dis"] = lista
         
 
-    def plota(self,plt_esp = False,arquivo_saida = False):
+    def plota(self,plt_esp = False):
         # df_loc = f"{self.OUT_DIR}/out/"
         local_pasta = f"{self.FILE_DIR}tabelas/resultados/plt_geral/"
         data_hoje = datetime.date.today()
@@ -227,34 +230,27 @@ class rodando(Altera_Xml):
         
   
         
-    def erro(self,X,substituir = True,recorta = False):
+    def erro(self,X):
         
         self.nomes_paramns["valores"]= X
-        # print(self.nomes_paramns)
-
-
-        settings_file = f"{self.SETTINGS_DIR}/settings.xml"
+        if hasattr(self,"settings"):
+            pass
+        else:
+            settings_file = f"{self.SETTINGS_DIR}/settings.xml"
+            self.settings = settings_file
         for variavel,nome  in zip( self.nomes_paramns.loc[self.nomes_paramns.tipo == "xml","valores"],self.nomes_paramns.loc[self.nomes_paramns.tipo == "xml","ParameterName"]) : 
-             # tipo = self.nomes_paramns.loc[self.nomes_paramns["ParameterName"] ==nome,"ON_OFF"].values[0]
-             # if tipo == False:
-             #     continue
-             # else:
                    self.editar_valor_variavel(settings_file,2,nome,variavel)
 
         for variavel,nome  in zip( self.nomes_paramns.loc[self.nomes_paramns.tipo != "xml","valores"],self.nomes_paramns.loc[self.nomes_paramns.tipo != "xml","ParameterName"]) : 
      
                  tipo = self.nomes_paramns.loc[self.nomes_paramns["ParameterName"] ==nome,"ON_OFF"].values[0]
-             # if tipo == False:
-             #     continue
-             # else:
                  self.inicia(nome,tipo,variavel)
-                 # self.Open()
-                 # self.manipular_nc()
                  self.manipular()
         os.system(f"lisflood {settings_file}")
 
         self.ler_saida()
-        self.nash_value = self.nash(recorta)
+        self.nash_value = self.nash()
+        # return self.nash_value
         if self.nash_value > 1 :
             return (1 - (-self.nash_value))
         else:

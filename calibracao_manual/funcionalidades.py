@@ -10,7 +10,10 @@ import os
 
 import pandas as pd 
 import xarray as xr
-
+import plotly.graph_objs as go
+import plotly.io as pio
+#pio.renderers.default = 'svg'
+pio.renderers.default = 'browser'
 import numpy as np 
 class Funcionalidades():
     
@@ -156,7 +159,7 @@ class Funcionalidades():
     def seta_melhores_parametros(self,file=None,skip = False):
          
         if file ==None:
-            file = "/discolocal/felipe/git_pm/calibracao_manual/tabelas/resultados/plt_geral/28_9/voltando as origens e funcionando.csv"
+            file = "./tabelas/resultados/plt_geral/28_9/voltando as origens e funcionando.csv"
         else:
             file = file
         df = pd.read_csv("./tabelas/fator_param_ranges.csv",index_col = 0)
@@ -254,4 +257,153 @@ class Funcionalidades():
         
         self.arquivo_saida = "novo_seco"  
         self.plota(plt_esp = "seco")    
-       
+        
+        
+    def compara_multiplos_anos(self,r = 0.2,m = 100):
+       caminho_arquivo = f"{self.SETTINGS_DIR}/compara_anos.xml"  # Substitua pelo caminho correto
+       self.settings = caminho_arquivo
+       anos = [str(ano) for ano in range(2013, 2024)]  # Ano correspondente
+       for ano_alvo in range(len(anos)):
+           self.arquivo_saida = ano_alvo
+           novo_ano = anos[ano_alvo]
+           ano_final = anos[ano_alvo]
+
+           self.novo_ano = novo_ano
+           self.ano_final= ano_final
+           print(novo_ano,ano_final)
+           self.altera_data(self.novo_ano,self.ano_final,caminho_arquivo)
+           print("aqui")
+           self.seta_melhores_parametros()
+           self.define_ativos()
+           df = pd.read_csv("./tabelas/fator_param_ranges.csv",index_col =0 )
+           
+           self.erro(df.DefaultValue.values)
+           self.plota()
+           # self.executa(ano_alvo,r,m,)
+           
+    def analise_sensibilidade(self,fator):
+        lista = ["maps",
+        "table2map",
+        "meteo",
+        "lai",
+        # "maps/landuse",
+        "maps/soilhyd"
+        ]
+        fora = [
+         'chan',
+         'chanbw',
+         'avgdis',
+         'lat',
+         'gradient',
+         'chanflpn',
+         'soildepth1_o',
+         'cropcoef_i',
+         'soildepth1_f',
+         'soildepth2_i',
+         'soildepth3_o',
+         'cropgrpn_f',
+         'soildepth3_i',
+         'soildepth2_f',
+         'mannings_f',
+         'cropgrpn_i',
+         'soildepth2_o',
+         'soildepth3_f',
+         'cropcoef_f',
+         'soildepth1_i',
+         'mannings_i',
+         'cropcoef_o',
+         'cropgrpn_o',
+         'n sei',
+         'es',
+         'ta',
+         'et',
+         'laif',
+         'laii',
+         'genua2_o',
+         'thetar1_f',
+         'thetas3_o',
+         'thetar3_o',
+         'genua1_o',
+         'genua2_f',
+         'thetas3_f',
+         'thetar3_f',
+         'ksat2_o',
+         'lambda2',
+         'ksat3_f',
+         'thetas1',
+         'genua1_f',
+         'genua3',
+         'lambda2_f',
+         'ksat2',
+         'lambda2_o',
+         'ksat3',
+         'ksat3_o',
+         'ksat1_o',
+         'thetas2',
+         'lambda3_o',
+         'ksat1',
+         'genua3_f',
+         'genua2',
+         'lambda1',
+         'ksat1_f',
+         'lambda1_o',
+         'ksat2_f',
+         'genua1',
+         'lambda3_f',
+         'lambda1_f',
+         'genua3_o',
+         'lambda3',
+         ]
+        final = pd.DataFrame()
+        for local in lista:
+            diretorio = f"{self.OUT_DIR}/{local}"
+            files = [x for x in os.listdir(diretorio) if x.endswith(".nc")]
+            print(files)
+            for arquivo in files:
+                nome = arquivo.split(".")[0]  
+                
+                if nome =="" or nome =="area" or nome == "chans" or nome == "ec_ldd" or nome == "outlets" or nome in fora:
+                    continue
+                dataset = xr.open_dataset(f"{diretorio}/{arquivo}")
+                coluna = list(dataset.variables)[-1]
+                dataset1 = dataset.copy()
+                dataset1[coluna] = dataset[coluna] * fator
+                
+                os.remove(f"{diretorio}/{arquivo}")
+                dataset1.to_netcdf(f"{diretorio}/{arquivo}")
+                
+                os.system("lisflood ../settings.xml")
+                
+                result = pd.read_csv(f"{self.OUT_DIR}/out/chanqWin.tss",skiprows=3)
+                lista = []
+                indexer = result.columns.values[0]
+                for i in result[indexer]:
+                    valor = i.split()[1]
+                    lista.append(float(valor))
+                final[nome] = lista
+        
+                os.remove(f"{diretorio}/{arquivo}")
+                dataset.to_netcdf(f"{diretorio}/{arquivo}")
+                final.to_csv(f"./tabelas/resultados/_{fator}.csv")
+                print(final)
+        return final
+        
+    def plota_analise(self,df_place):
+        # import plotly.graph_objs as go
+        df_place = "./tabelas/resultados/_10.csv"
+        df = pd.read_csv(df_place,index_col = 0)
+        nome = df_place.split("/")[-1]
+        fig = go.Figure()   
+        fig.add_trace(go.Scatter(x = df.index , y =  self._obs["horleitura"],name = "obs"))
+        
+        for coluna in df.columns:
+    
+            merged = self._obs
+            merged["ls_dis"] = df[coluna].values
+            targets = merged["horleitura"]
+            predictions = merged["ls_dis"]
+            nash_value = (1-(np.sum((targets-predictions)**2)/np.sum((targets-np.mean(targets))**2)))
+            print(nash_value)
+            fig.add_trace(go.Scatter(x = df.index , y = df[coluna],name = f"{coluna} _>{nash_value}"))
+        fig.show()
+       # self.comparando_multiplos_anos = False

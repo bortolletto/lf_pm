@@ -106,27 +106,40 @@ class Calibrador(rodando,Funcionalidades):
 
       
     def executa(self, arquivo_saida,r = 0.2,m = 1000):
+        if hasattr(self,"settings"):
+            pass
+        else:
+            self.settings = False
         self.arquivo_saida = arquivo_saida
         self.resultados = pd.DataFrame() 
         
         self.xbest_f,self.fbest_f= self.dds(self.lower,self.upper,self.X0,super().erro,r,m)
         self.plota()
     def altera_data(self,novo_ano,final_ano,caminho_arquivo = None):
+        self.novo_ano = novo_ano
+        self.ano_final = final_ano
         if caminho_arquivo == None:
             caminho_arquivo = "../settings.xml"
-            
-            temp.ajustar_parametros_ano(caminho_arquivo, novo_ano,final_ano)
-            temp.ajustar_dimensao_temporal(novo_ano,final_ano)
+         
+        temp.ajustar_parametros_ano(caminho_arquivo, novo_ano,final_ano)
+        temp.ajustar_dimensao_temporal(novo_ano,final_ano)
     
         #%%
 if __name__ == "__main__":
     temp = Calibrador()
     temp.inicializar()
-    temp.reseta()
-    temp.reseta_for_the_best()
-    temp.seta_melhores_parametros()
+    # temp.plota_analise("./tabelas/resultados/_10.csv")
+    # temp.compara_multiplos_anos()
+    temp.altera_data("2013", "2021",    f"../settings.xml")
+    # temp.reseta()
+    # # # temp.reseta_for_the_best()
+    temp.seta_melhores_parametros(file = "../validacao/PARAMETOS.csv")
     temp.define_ativos()
-    temp.manipular()
+    temp.analise_sensibilidade(0.1)
+    # df = pd.read_csv("./tabelas/fator_param_ranges.csv",index_col = 0)
+    # # # temp.manipular()
+    # temp.erro(df.DefaultValue.values)
+    # temp.altera_data("2021", "2023",caminho_arquivo='../run_lf.xml')
     # df_chuva = pd.read_csv("./tabelas/chuva_editada.csv",index_col = 0,parse_dates = True)
     # df_chuva = df_chuva.media.to_frame()
     # df_chuva = pd.read_csv("/discolocal/felipe/git_pm/codigos/chuva_simepar/new_rain/chuva_media.csv",index_col = 0,parse_dates = True)
@@ -137,8 +150,8 @@ if __name__ == "__main__":
     
     # temp.calibra_humido("2013","2015")
     # temp.calibra_seco("2016","2020")
-    temp.altera_data("2013", "2020")
-    temp.executa("wtf_bro KGE",r = 0.02,m =5000)
+
+    # temp.executa("wtf_bro KGE",r = 0.02,m =5000)
     "melhor resultado da rodada anteriror =0.3529255798088453"
     # temp.reseta()
     # temp.reseta_for_the_best()
