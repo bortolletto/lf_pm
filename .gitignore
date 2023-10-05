@@ -3,9 +3,9 @@
 **/*.tif
 **/*.xlsx
 **/*.zip
-./catch/
-./calibracao_manual/tabelas/resultados/
+./catch/*
+./calibracao_manual/tabelas/resultados/*
 ./catch_lisvap/mapsln/DEM.tif
-./catch_lisvap/nova_resoc/
-./calibracao_manual/tabelas/resultados/plt_geral/
-.calibracao_manual/__pycache__/
+./catch_lisvap/nova_resoc/*
+./calibracao_manual/tabelas/resultados/plt_geral/*
+.calibracao_manual/__pycache__/*
