@@ -110,11 +110,13 @@ class Calibrador(rodando,Funcionalidades):
             pass
         else:
             self.settings = False
+        print(self.settings)
         self.arquivo_saida = arquivo_saida
         self.resultados = pd.DataFrame() 
         
         self.xbest_f,self.fbest_f= self.dds(self.lower,self.upper,self.X0,super().erro,r,m)
         self.plota()
+
     def altera_data(self,novo_ano,final_ano,caminho_arquivo = None):
         self.novo_ano = novo_ano
         self.ano_final = final_ano
@@ -129,11 +131,17 @@ if __name__ == "__main__":
     temp = Calibrador()
     temp.inicializar()
     temp.reseta()
+    tipos_alvo =  ["table2map","landuse","soilhyd"]
+    nominal = ["lambda","ksat","genua"]
+
     temp.seta_melhores_parametros("/discolocal/felipe/git_pm/calibracao_manual/tabelas/resultados/plt_geral/4_10/wtf_bro KGE.csv")
-    temp.define_ativos(tipos_alvo = ["table2map"])
-    temp.reseta_for_the_best(tipos_alvo=["table2map"])
-  
+    temp.define_ativos(nominal = nominal,tipos_alvo =tipos_alvo )
+    temp.reseta_for_the_best(nominal = nominal,tipos_alvo =tipos_alvo )
+    temp.altera_data("2013","2015")
+    # thetas = temp.analisa_thetas(10)
+    # temp.plota_analise_tehtas("/discolocal/felipe/git_pm/validacao/analise_thetas10.csv")
     
+    # temp.executa("bora q bora log nash neles receba",m = 1000)
   
     
     "melhor resultado da rodada anteriror =0.3529255798088453"

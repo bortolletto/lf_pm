@@ -162,7 +162,7 @@ class rodando(Altera_Xml):
     
     ######################## old dds ###############################   
     #%%
-    def nash(self,kge = False):
+    def nash(self,kge = "log"):
         if kge == False:
             self.df_merged = pd.merge(self.df,self._obs,left_index= True,right_index= True)
             targets = self.df_merged["horleitura"]
@@ -182,7 +182,14 @@ class rodando(Altera_Xml):
             print(kge)
             return (1 - kge[0])
             # return kge[0]
-
+        elif kge == "log":
+            self.df_merged = pd.merge(self.df,self._obs,left_index= True,right_index= True)
+            targets = self.df_merged["horleitura"]
+            predictions = self.df_merged["ls_dis"]
+            self.nome_grafico = "nash"
+            nash = np.sum((np.log(targets)-np.log(predictions))**2)/np.sum((np.log(targets)-np.mean(np.log(targets)))**2)
+            print(nash)
+            return ( 1 - nash)
 
     def ler_saida(self):
         df_loc = f"{self.OUT_DIR}/out/"
@@ -191,13 +198,16 @@ class rodando(Altera_Xml):
         for i in sim["1"]:
             valor = i.split()[1]
             lista.append(float(valor))
+        # ano_forcado = 2021
         if 367<=len(lista) <= 3000:
-            data = pd.date_range(start=self.novo_ano,end = self.ano_final,freq = "D" )
+            data = pd.date_range(start=self.novo_ano,end = self.ano_final,freq = "D" ) #
         elif len(lista) <= 366:
-            data = pd.date_range(start="2022-01-01 00:00:00",end = "2022-12-31 00:00:00",freq = "D" )
+            data = pd.date_range(start="2023-01-01 00:00:00",end = "2023-04-07 00:00:00",freq = "D" )
         else:
             data = pd.date_range(start="2013-01-03 00:00:00",end = "2023-04-09 00:00:00",freq = "D" )
         
+        print(data)
+        # data = data[:-1]
         self.df = pd.DataFrame(index = data)
         self.df["ls_dis"] = lista
         
@@ -233,11 +243,13 @@ class rodando(Altera_Xml):
     def erro(self,X):
         
         self.nomes_paramns["valores"]= X
-        if hasattr(self,"settings"):
+
+        if hasattr(self,"settings") and self.settings != False :
             pass
         else:
             settings_file = f"{self.SETTINGS_DIR}/settings.xml"
             self.settings = settings_file
+        settings_file = f"{self.SETTINGS_DIR}/settings.xml"
         for variavel,nome  in zip( self.nomes_paramns.loc[self.nomes_paramns.tipo == "xml","valores"],self.nomes_paramns.loc[self.nomes_paramns.tipo == "xml","ParameterName"]) : 
                    self.editar_valor_variavel(settings_file,2,nome,variavel)
 

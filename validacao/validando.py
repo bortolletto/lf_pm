@@ -49,7 +49,7 @@ def ler(df_loc):
 
 
 df_loc = "../catch/out/chanqWin.tss"
-df_loc = "./resultados/4.tss"
+df_loc = "./resultados/6.tss"
 lista = ler(df_loc)
 
 df_loc = "./resultados/1.tss"
@@ -111,9 +111,10 @@ from plotly.subplots import make_subplots
 chuva = xr.open_dataset("../catch/meteo/pr.nc").to_dataframe()
 chuva =chuva.groupby("time").mean()
 fig = make_subplots(specs = [[ { "secondary_y" : True}]])
+
 fig.add_trace(go.Bar(x = chuva.index , y = chuva.pr,name = f"chuva",marker_color = "blue"),secondary_y=True)
 fig.add_trace(go.Scatter(x = df.index , y = df.ls_dis,name = f"simulado nash: {round(nash,2)}",marker_color = "red"),secondary_y=False)
-fig.add_trace(go.Scatter(x = df.index , y = df.ls_dis,name = f"original: {round(nse(df['0'],df['horleitura']),2)}",marker_color = "green"),secondary_y=False)
+fig.add_trace(go.Scatter(x = df.index , y = df["0"],name = f"original: {round(nse(df['0'],df['horleitura']),2)}",marker_color = "green"),secondary_y=False)
 fig.add_trace(go.Scatter(x= df.index,y=df.horleitura,name = "obs", marker_color = "black"),secondary_y=False)
 fig.update_layout(title = f"periodo de {start.split('-')[0]}: {end.split('-')[0]}")
 fig["layout"]["yaxis2"]["autorange"] = "reversed"
@@ -134,40 +135,46 @@ print()
 print(cp_obs.describe())
 
 
-#%%
-df_place = "../calibracao_manual/tabelas/resultados/_01.csv"
-df = pd.read_csv(df_place,index_col = 0)
-nome = df_place.split("/")[-1]
-fig = go.Figure()   
-fig.add_trace(go.Scatter(x = df.index , y =  obs["horleitura"],name = "obs"))
-fora = []
-for coluna in df.columns:
+#%% 
+'''
 
-    merged = obs.horleitura.to_frame()
-    merged["ls_dis"] = df[coluna].values
-    targets = merged["horleitura"]
-    predictions = merged["ls_dis"]
-    nash_value = (1-(np.sum((targets-predictions)**2)/np.sum((targets-np.mean(targets))**2)))
-    print(nash_value)
-    dif = (abs(nash_value) - 0.299768776  )
-    if dif < 0.0003:
-        fora.append(coluna)
-    fig.add_trace(go.Scatter(x = df.index , y = df[coluna],name = f"{coluna} _>{nash_value}"))
-fig.show()
+analise sensibilidade
+
+
+'''
+# df_place = "../calibracao_manual/tabelas/resultados/_01.csv"
+# df = pd.read_csv(df_place,index_col = 0)
+# nome = df_place.split("/")[-1]
+# fig = go.Figure()   
+# fig.add_trace(go.Scatter(x = df.index , y =  obs["horleitura"],name = "obs"))
+# fora = []
+# for coluna in df.columns:
+
+#     merged = obs.horleitura.to_frame()
+#     merged["ls_dis"] = df[coluna].values
+#     targets = merged["horleitura"]
+#     predictions = merged["ls_dis"]
+#     nash_value = (1-(np.sum((targets-predictions)**2)/np.sum((targets-np.mean(targets))**2)))
+#     print(nash_value)
+#     dif = (abs(nash_value) - 0.299768776  )
+#     if dif < 0.0003:
+#         fora.append(coluna)
+#     fig.add_trace(go.Scatter(x = df.index , y = df[coluna],name = f"{coluna} _>{nash_value}"))
+# fig.show()
  
-fig =  go.Figure()
-fig.add_trace(go.Scatter(
-    x = cp_obs.horleitura,y = cp_obs.p,name = "obs"
-    ))
-fig.add_trace(go.Scatter(
-    x = cp_sim.ls_dis,y = cp_sim.p,name = "simulado"
-    ))
-for coluna in df.columns:
-    temp = cp(df,coluna)
+# fig =  go.Figure()
+# fig.add_trace(go.Scatter(
+#     x = cp_obs.horleitura,y = cp_obs.p,name = "obs"
+#     ))
+# fig.add_trace(go.Scatter(
+#     x = cp_sim.ls_dis,y = cp_sim.p,name = "simulado"
+#     ))
+# for coluna in df.columns:
+#     temp = cp(df,coluna)
 
 
-    fig.add_trace(go.Scatter(
-        x = temp[coluna],y = temp.p,name = coluna
-        ))
-    fig.update_layout(title = f"periodo de {start.split('-')[0]}: {end.split('-')[0]}")
-fig.show()
+#     fig.add_trace(go.Scatter(
+#         x = temp[coluna],y = temp.p,name = coluna
+#         ))
+#     fig.update_layout(title = f"periodo de {start.split('-')[0]}: {end.split('-')[0]}")
+# fig.show()

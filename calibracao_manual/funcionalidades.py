@@ -290,70 +290,70 @@ class Funcionalidades():
         "maps/soilhyd"
         ]
         fora = [
-         'chan',
-         'chanbw',
-         'avgdis',
-         'lat',
-         'gradient',
-         'chanflpn',
-         'soildepth1_o',
-         'cropcoef_i',
-         'soildepth1_f',
-         'soildepth2_i',
-         'soildepth3_o',
-         'cropgrpn_f',
-         'soildepth3_i',
-         'soildepth2_f',
-         'mannings_f',
-         'cropgrpn_i',
-         'soildepth2_o',
-         'soildepth3_f',
-         'cropcoef_f',
-         'soildepth1_i',
-         'mannings_i',
-         'cropcoef_o',
-         'cropgrpn_o',
-         'n sei',
-         'es',
-         'ta',
-         'et',
-         'laif',
-         'laii',
-         'genua2_o',
-         'thetar1_f',
-         'thetas3_o',
-         'thetar3_o',
-         'genua1_o',
-         'genua2_f',
-         'thetas3_f',
-         'thetar3_f',
-         'ksat2_o',
-         'lambda2',
-         'ksat3_f',
-         'thetas1',
-         'genua1_f',
-         'genua3',
-         'lambda2_f',
-         'ksat2',
-         'lambda2_o',
-         'ksat3',
-         'ksat3_o',
-         'ksat1_o',
-         'thetas2',
-         'lambda3_o',
-         'ksat1',
-         'genua3_f',
-         'genua2',
-         'lambda1',
-         'ksat1_f',
-         'lambda1_o',
-         'ksat2_f',
-         'genua1',
-         'lambda3_f',
-         'lambda1_f',
-         'genua3_o',
-         'lambda3',
-         ]
+          'chan',
+          'chanbw',
+          'avgdis',
+          'lat',
+          'gradient',
+          'chanflpn',
+          'soildepth1_o',
+          'cropcoef_i',
+          'soildepth1_f',
+          'soildepth2_i',
+          'soildepth3_o',
+          'cropgrpn_f',
+          'soildepth3_i',
+          'soildepth2_f',
+          'mannings_f',
+          'cropgrpn_i',
+          'soildepth2_o',
+          'soildepth3_f',
+          'cropcoef_f',
+          'soildepth1_i',
+          'mannings_i',
+          'cropcoef_o',
+          'cropgrpn_o',
+          'n sei',
+          'es',
+          'ta',
+          'et',
+          'laif',
+          'laii',
+          'genua2_o',
+          'thetar1_f',
+          'thetas3_o',
+          'thetar3_o',
+          'genua1_o',
+          'genua2_f',
+          'thetas3_f',
+          'thetar3_f',
+          'ksat2_o',
+          'lambda2',
+          'ksat3_f',
+          'thetas1',
+          'genua1_f',
+          'genua3',
+          'lambda2_f',
+          'ksat2',
+          'lambda2_o',
+          'ksat3',
+          'ksat3_o',
+          'ksat1_o',
+          'thetas2',
+          'lambda3_o',
+          'ksat1',
+          'genua3_f',
+          'genua2',
+          'lambda1',
+          'ksat1_f',
+          'lambda1_o',
+          'ksat2_f',
+          'genua1',
+          'lambda3_f',
+          'lambda1_f',
+          'genua3_o',
+          'lambda3',
+          ]
         final = pd.DataFrame()
         for local in lista:
             diretorio = f"{self.OUT_DIR}/{local}"
@@ -390,9 +390,9 @@ class Funcionalidades():
         
     def plota_analise(self,df_place):
         # import plotly.graph_objs as go
-        df_place = "./tabelas/resultados/_10.csv"
+        # df_place = ""./tabelas/resultados/_10.csv""
         df = pd.read_csv(df_place,index_col = 0)
-        nome = df_place.split("/")[-1]
+        # nome = df_place.split("/")[-1]
         fig = go.Figure()   
         fig.add_trace(go.Scatter(x = df.index , y =  self._obs["horleitura"],name = "obs"))
         
@@ -407,3 +407,69 @@ class Funcionalidades():
             fig.add_trace(go.Scatter(x = df.index , y = df[coluna],name = f"{coluna} _>{nash_value}"))
         fig.show()
        # self.comparando_multiplos_anos = False
+
+    def analisa_thetas(self,fator):
+        final = pd.DataFrame()
+        diretorio = "../catch/maps/soilhyd"
+        files = [x for x in os.listdir(diretorio) if x.startswith("th")]
+        print(files)
+        for arquivo in files:
+             nome = arquivo.split(".")[0]  
+             dataset = xr.open_dataset(f"{diretorio}/{arquivo}")
+             coluna = list(dataset.variables)[-1]
+             dataset1 = dataset.copy()
+             dataset1[coluna] = dataset[coluna] * fator
+             
+             os.remove(f"{diretorio}/{arquivo}")
+             dataset1.to_netcdf(f"{diretorio}/{arquivo}")
+             
+             os.system("lisflood ../settings.xml")
+             
+             result = pd.read_csv(f"{self.OUT_DIR}/out/chanqWin.tss",skiprows=3)
+             lista = []
+             indexer = result.columns.values[0]
+             for i in result[indexer]:
+                 valor = i.split()[1]
+                 lista.append(float(valor))
+             final[nome] = lista
+     
+             os.remove(f"{diretorio}/{arquivo}")
+             dataset.to_netcdf(f"{diretorio}/{arquivo}")
+             final.to_csv(f"/discolocal/felipe/git_pm/validacao/analise_thetas{fator}.csv")
+             print(final)
+        return final
+    
+    def plota_analise_tehtas(self,df_place):
+        # import plotly.graph_objs as go
+        # df_place = ""./tabelas/resultados/_10.csv""
+        df = pd.read_csv(df_place,index_col = 0)
+        # nome = df_place.split("/")[-1]
+        fig = go.Figure()   
+        merged = self._obs["2013":"2015"]
+        fig.add_trace(go.Scatter(x = merged.index , y =  merged["horleitura"],name = "obs"))
+        print(merged)
+        for coluna in df.columns:
+    
+            
+            merged["ls_dis"] = df[coluna].values
+            targets = merged["horleitura"]
+            predictions = merged["ls_dis"]
+            nash_value = (1-(np.sum((targets-predictions)**2)/np.sum((targets-np.mean(targets))**2)))
+            print(nash_value)
+            fig.add_trace(go.Scatter(x = merged.index , y = df[coluna],name = f"{coluna} _>{nash_value}"))
+            
+        sim =  pd.read_csv('/discolocal/felipe/git_pm/validacao/resultados/0.tss',skiprows=3)
+        
+        lista = []
+        for i in sim["1"]:
+            valor = i.split()[1]
+            lista.append(float(valor))
+
+            
+        data = pd.date_range(start="2013-01-01",end = "2020-12-31",freq = "D" )
+        dx = pd.DataFrame(index = data)
+        dx["sim0"] = lista
+        dx = dx["2013":"2015"]
+
+        fig.add_trace(go.Scatter(x = dx.index , y = dx["sim0"],name = "sim0"))
+        fig.show()
