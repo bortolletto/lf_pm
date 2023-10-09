@@ -20,7 +20,7 @@ pio.renderers.default = 'browser'
 
 data_hoje = datetime.date.today()
 start="2013-01-01 00:00:00"
-end = "2020-12-31 00:00:00"
+end = "2015-12-31 00:00:00"
 # end = "2023-04-07 00:00:00"
 
 # start="2013-01-03 00:00:00"
@@ -49,7 +49,7 @@ def ler(df_loc):
 
 
 df_loc = "../catch/out/chanqWin.tss"
-df_loc = "./resultados/6.tss"
+df_loc = "./resultados/9.tss"
 lista = ler(df_loc)
 
 df_loc = "./resultados/1.tss"
@@ -58,9 +58,9 @@ lista2 = ler(df_loc)
 data = pd.date_range(start=start,end = end,freq = "D" )
 
 df = pd.DataFrame(index = data)
-df = df["2013":"2021"]
+df = df["2013":"2015"]
 df["ls_dis"] = lista
-df["0"] = lista2
+df["0"] = lista2[:1095]
 df.ls_dis = df.ls_dis.shift(2)
 df["0"] = df["0"].shift(2)
 
