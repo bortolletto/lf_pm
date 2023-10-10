@@ -125,7 +125,8 @@ class Calibrador(rodando,Funcionalidades):
          
         temp.ajustar_parametros_ano(caminho_arquivo, novo_ano,final_ano)
         temp.ajustar_dimensao_temporal(novo_ano,final_ano)
-    
+   
+
         #%%
 if __name__ == "__main__":
     temp = Calibrador()
@@ -134,10 +135,12 @@ if __name__ == "__main__":
     tipos_alvo =  ["table2map","landuse","soilhyd"]
     nominal = ["lambda","ksat","genua"]
 
-    temp.seta_melhores_parametros("/discolocal/felipe/git_pm/calibracao_manual/tabelas/resultados/plt_geral/4_10/wtf_bro KGE.csv")
+    temp.seta_melhores_parametros("./tabelas/resultados/plt_geral/4_10/wtf_bro KGE.csv")
     temp.define_ativos(nominal = nominal,tipos_alvo =tipos_alvo )
     temp.reseta_for_the_best(nominal = nominal,tipos_alvo =tipos_alvo )
-    temp.altera_data("2013","2015")
+    temp.altera_data("2013","2020")
+    temp.modifica_uno("maps/soilhyd/thetar2", "soilhyd/thetar/thetar2",  0.16009)
+    temp.modifica_uno("maps/soilhyd/thetar1", "soilhyd/thetar/thetar1",  0.12045)
     # thetas = temp.analisa_thetas(10)
     # temp.plota_analise_tehtas("/discolocal/felipe/git_pm/validacao/analise_thetas10.csv")
     
@@ -150,7 +153,7 @@ if __name__ == "__main__":
     # temp.define_ativos()
     # temp.calibra_humido("2013","2015")
     # temp.calibra_seco("2016","2020")
-    # a,b,c = temp.cria_super_csv()
+    a,b,c = temp.cria_super_csv()
 
 
     

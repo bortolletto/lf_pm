@@ -473,3 +473,14 @@ class Funcionalidades():
 
         fig.add_trace(go.Scatter(x = dx.index , y = dx["sim0"],name = "sim0"))
         fig.show()
+    def modifica_uno(self,saida,nome, fator):
+            path_coleta = f"./params_calibration/{nome}"
+            path_entrega = f"../catch/{saida}"
+            
+            dataset = xr.open_dataset(f"{path_coleta}.nc")
+            name_var = list(dataset.variables)[-1] 
+            dataset[name_var].values = [[fator for _ in range(len(dataset.x))] for _ in range(len(dataset.y))]
+            os.remove(f"{path_entrega}.nc")
+            dataset.to_netcdf(f"{path_entrega}.nc")
+            print(dataset)
+            

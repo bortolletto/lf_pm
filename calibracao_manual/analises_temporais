@@ -101,7 +101,8 @@ class Funcionalidades():
             nash_value = (1-(np.sum((targets-predictions)**2)/np.sum((targets-np.mean(targets))**2)))
             print(nash_value)
             fig.add_trace(go.Scatter(x = df.index , y = df[coluna],name = f"{coluna} _>{nash_value}"))
-        fig.write_html(f"/discolocal/felipe/lisflood_pm/calibracao/tabelas/resultados/analise_sensibilidade/{nome}.html")
+        fig.show()
+        # fig.write_html(f"/discolocal/felipe/lisflood_pm/calibracao/tabelas/resultados/analise_sensibilidade/{nome}.html")
     
     def ativa_era5(self,ativar):
         if ativar == "ERA5":
@@ -180,7 +181,7 @@ class Funcionalidades():
             print(f"Arquivo ajustado: {caminho_novo_arquivo}")
             
             
-    def compara_multiplos_anos(self,r = 0.2,m = 1000):
+    def compara_multiplos_anosold(self,r = 0.2,m = 1000):
         caminho_arquivo = f"{self.SETTINGS_DIR}/compara_anos.xml"  # Substitua pelo caminho correto
         anos = [str(ano) for ano in range(2013, 2024)]  # Ano correspondente
         self.comparando_multiplos_anos = True
