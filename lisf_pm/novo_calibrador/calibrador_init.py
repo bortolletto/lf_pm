@@ -11,8 +11,18 @@ import xarray as xr
 import pandas as pd 
 import xml.etree.ElementTree as ET
 import numpy as np
-import datetime 
+
 from tqdm import tqdm
+import plotly.io as pio
+import plotly.graph_objs as go
+pio.renderers.default = 'browser'
+
+from plotly.subplots import make_subplots
+    
+import hydroeval as he
+
+
+
 def reseta(files = None,nominal = None):
     
     if files == None:
@@ -77,7 +87,6 @@ def editar_valor_variavel(arquivo_xml, grupo_index, variavel, novo_valor):
         var_nome = textvar_element.get('name')
         
         if var_nome == variavel:
-            print(var_nome,novo_valor)    
             textvar_element.set('value', novo_valor)
             break
     tree.write(arquivo_xml)
@@ -109,16 +118,23 @@ def ler_saida():
     for i in sim["1"]:
         valor = i.split()[1]
         lista.append(float(valor))
+    
+    # sim =  pd.read_csv("../tabelas/resultados/kge0_8.tss",skiprows=3)
+    # lista2 = []
+    # for i in sim["1"]:
+    #     valor = i.split()[1]
+    #     lista2.append(float(valor))
+    
+    
     obs = pd.read_csv("../tabelas/pm_vazao_obs.csv",index_col = 0,parse_dates=True)
-    obs = obs["2013-01-01":"2020-12-31"]
+    obs = obs["2015-01-01":"2021-12-31"]
     
     obs["ls_sim"] = lista
+    # obs["kge8"] = lista2
     return obs
-def dds(self,Xmin, Xmax,X0, fobj, r=0.2, m=1000):
+def dds(place_name,Xmin, Xmax,X0, fobj, r=0.2, m=1000):
         # Passo 1
-        data_hoje = datetime.date.today()
-        pasta = f"../tabelas/resultados/{data_hoje.day}_{data_hoje.month}"
-        place = f"{pasta}/rodada_atual.csv"
+        place = f"../tabelas/resultados/{place_name}.csv"
         Xmin = np.asarray(Xmin)
         Xmax = np.asarray(Xmax)
         X0 = (Xmin + Xmax)/2
@@ -156,23 +172,22 @@ def dds(self,Xmin, Xmax,X0, fobj, r=0.2, m=1000):
             # Passo 5
             Fnew = fobj(Xnew)
             print(Fbest)
-            if Fnew <= Fbest:
+            if Fnew < 1 and abs(1 - Fnew) < abs(1 - Fbest):
+                
                 Fbest = Fnew
                 Xbest = np.copy(Xnew)
                 
-                if not os.path.exists(place):
-                    os.makedirs(pasta)
-                    print(f"Pasta '{self.pasta }' criada com sucesso.")
                 temp = ler_csv_parametros()
+                temp = temp.iloc[0:8]
                 temp["DefaultValue"]= Xbest
                 temp.to_csv(place)
-                print(f"Arquivo '{place}' criado com sucesso.")
+                
                 
         # Fim
         return Xbest, Fbest 
-def erro():
+
     
-    def erro(X):
+def erro(X):
         nomes_paramns = ler_csv_parametros()
         nomes_paramns["DefaultValue"]= X
 
@@ -196,19 +211,209 @@ def erro():
         dados = ler_saida()
         targets = dados["horleitura"]
         predictions = dados["ls_sim"]
-        nash_value = np.sum((targets-predictions)**2)/np.sum((targets-np.mean(targets))**2)
-        
-        # return nash_value
-        if nash_value > 1 :
-            return (1 - (-nash_value))
-        else:
-            return (1 - nash_value)
-        
-    return 
+        # nash_value = np.sum((targets-predictions)**2)/np.sum((targets-np.mean(targets))**2)
+        kge, r, alpha, beta = he.evaluator(he.kge, predictions, targets)
+        return kge[0]
+    
+def erro_sem_frac(X):
+        nomes_paramns = ler_csv_parametros()
+        nomes_paramns = nomes_paramns.iloc[0:8]
+        nomes_paramns["DefaultValue"]= X
+
+        settings_file= "../settings.xml"
+        temp_xml = nomes_paramns.loc[nomes_paramns.tipo == "xml"]
+        temp_frac = nomes_paramns.loc[nomes_paramns.tipo == "landuse"]
+        for variavel,nome  in zip( temp_xml["DefaultValue"],temp_xml["ParameterName"]) : 
+                   editar_valor_variavel(settings_file,2,nome,variavel)
+        for variavel,nome  in zip( temp_frac["DefaultValue"],temp_frac["ParameterName"]) : 
+                 diretorio_entrada = f"./params_calibration/maps/landuse/{nome}.nc"
+                 dataset = xr.open_dataset(diretorio_entrada)
+                 diretorio_saida = f"../catch/maps/landuse/{nome}.nc"
+                 
+                 name_var = list(dataset.variables)[-1]     
+                 dataset[name_var].values = [[variavel for _ in range(len(dataset.x))] for _ in range(len(dataset.y))]
+                 os.remove(diretorio_saida)
+                 dataset.to_netcdf(diretorio_saida)
+                 
+        os.system(f"lisflood {settings_file}")
+
+        dados = ler_saida()
+        targets = dados["horleitura"]
+        predictions = dados["ls_sim"]
+        # nash_value = np.sum((targets-predictions)**2)/np.sum((targets-np.mean(targets))**2)
+        kge, r, alpha, beta = he.evaluator(he.kge, predictions, targets)
+        return kge[0]
+        # if nash_value > 1 :
+        #     return (1 - (-nash_value))
+        # else:
+        #     return (1 - nash_value)
+def ativa_parametros(csv):
+    # csv = "test_doubleif"
+    df_loc = f"../tabelas/resultados/{csv}.csv"
+    df = pd.read_csv(df_loc,index_col = 0)
+    settings_file= "../settings.xml"
+    temp_xml = df.loc[df.tipo == "xml"]
+    temp_frac = df.loc[df.tipo == "landuse"]
+    for variavel,nome  in zip( temp_xml["DefaultValue"],temp_xml["ParameterName"]) : 
+               editar_valor_variavel(settings_file,2,nome,variavel)
+    for variavel,nome  in zip( temp_frac["DefaultValue"],temp_frac["ParameterName"]) : 
+             diretorio_entrada = f"./params_calibration/maps/landuse/{nome}.nc"
+             dataset = xr.open_dataset(diretorio_entrada)
+             diretorio_saida = f"../catch/maps/landuse/{nome}.nc"
+             
+             name_var = list(dataset.variables)[-1]     
+             dataset[name_var].values = [[variavel for _ in range(len(dataset.x))] for _ in range(len(dataset.y))]
+             os.remove(diretorio_saida)
+             dataset.to_netcdf(diretorio_saida)
+    print("novo parametros implementados")
+    return df
+
+
+
+def cp(df,nome):
+    df = df[nome]
+    valores_ordenados = df.sort_values().to_frame()
+    n = len(valores_ordenados)
+    valores_ordenados["p"] = [(n-i+1)/(n+1) for i in range(n)   ]
+    valores_ordenados["p-1"] = 1 - valores_ordenados["p"]
+    return valores_ordenados
+
+
+def altera_um(nome,novo_valor,arquivo_xml = "../settings.xml"):
+    # df = pd.read_csv("../tabelas/resultados/calibrar.csv",index_col = 0)
+    
+    # print(df[["ParameterName","DefaultValue"]])
+    editar_valor_variavel(arquivo_xml,2,nome,novo_valor)
+
+def nse(predictions, targets):
+    return (np.sum((targets-predictions)**2)/np.sum((targets-np.mean(targets))**2))
+
+def validando(nome):
+    df = ler_saida()
+    
+    log_nash = nse(np.log(df["ls_sim"]),np.log(df["horleitura"]))
+    nash = nse(df["ls_sim"],df["horleitura"])
+    df = df.fillna(df.mean())
+    kge, r, alpha, beta = he.evaluator(he.kge, df["ls_sim"], df["horleitura"])
+
+    integral_A = np.trapz(df["ls_sim"].fillna(df.ls_sim.mean()))
+
+    # Calcule a integral de B usando a Regra do Trapézio
+    integral_B = np.trapz(df["horleitura"].fillna(df["horleitura"].mean()))
+
+    # Calcule a diferença entre as integrais
+    diferenca = integral_B - integral_A
+    
+    cp_sim = cp(df,"ls_sim")
+    cp_obs = cp(df,"horleitura")
+    # cp_0 = cp(df,"kge8")
+    fig =  go.Figure()
+    
+    fig.add_trace(go.Scatter(
+        x = cp_sim.ls_sim,y = cp_sim.p,name = "simulado"
+        ))
+    # fig.add_trace(go.Scatter(
+    #     x = cp_0["kge8"],y = cp_0.p,name = "original"
+    #     ))
+    fig.add_trace(go.Scatter(
+        x = cp_obs.horleitura,y = cp_obs.p,name = "obs"
+        ))
+    fig.update_layout(title = "periodo de 2022")
+    fig.show()
+
+    chuva = xr.open_dataset("../catch/meteo/pr.nc").to_dataframe()
+    chuva =chuva.groupby("time").mean()
+    chuva = chuva["2021":"2021"]
+    fig = make_subplots(specs = [[ { "secondary_y" : True}]])
+    predictions = df.ls_sim
+    targets = df.horleitura
+    nash = nse(predictions,targets)
+    fig.add_trace(go.Bar(x = chuva.index , y = chuva.pr,name = "chuva",marker_color = "blue"),secondary_y=True)
+    fig.add_trace(go.Scatter(x = df.index , y = df.ls_sim,name = f"simulado nash: {round(nash,2)}",marker_color = "red"),secondary_y=False)
+    # fig.add_trace(go.Scatter(x = df.index , y = df["kge8"],name = f"original: {round(nse(df['kge8'],df['horleitura']),2)}",marker_color = "green"),secondary_y=False)
+    fig.add_trace(go.Scatter(x= df.index,y=df.horleitura,name = "obs", marker_color = "black"),secondary_y=False)
+    fig.update_layout(title = "periodo de 2013-2020")
+    fig["layout"]["yaxis2"]["autorange"] = "reversed"
+    fig.show()
+    # Imprima os resultados
+    print("nash:",round(nash,2))
+    print("log_nash",round(log_nash,2))
+    print("kge,r,alpha,beta:",kge,r,alpha,beta)
+    print("Integral de A:", integral_A)
+    print("Integral de B:", integral_B)
+    print("Diferença entre as integrais:", round(diferenca,2), "em porcentagem:", abs(diferenca/integral_B))
+    
+    print()
+    print("--------------#---------------")
+    print()
+    print(cp_sim.describe())
+    print()
+    print(cp_obs.describe())
+    df.to_csv(f"../tabelas/resultados/validando/{nome}_{nash}.csv") 
+
+
+
+def calibra_seco():
+    ini_calibracao = "2013-01-01"
+    final_calibracao = "2015-12-31"
+    
+    ini_valid = "2022-01-01"
+    fim_valid = "2022-12-31"
+    
+    reseta()
+    ajustar_parametros_ano("../settings.xml",ini_calibracao,final_calibracao )
+    df = ativa_parametros("calibrar")
+    df = df.iloc[0:8]
+    X,F = dds("calibrando_seco",df.MinValue,df.MaxValue,df.DefaultValue,erro_sem_frac,r = 0.1,m =300)
+    
+    df = ativa_parametros("calibrando_seco")
+    ajustar_parametros_ano("../settings.xml",ini_valid,fim_valid )
+    os.system("lisflood ../settings.xml")
+    print("calibracao_feita e rodada, agora so ver os resultados filhao!")
+
+    return X,F
+
+def calibra_umido():
+    ini_calibracao = "2015-01-01"
+    final_calibracao = "2021-12-31"
+    
+    ini_valid = "2021-01-01"
+    fim_valid = "2021-12-31"
+    
+    reseta()
+    ajustar_parametros_ano("../settings.xml",ini_calibracao,final_calibracao )
+    df = ativa_parametros("calibrar")
+    df = df.iloc[0:8]
+    X,F = dds("calibrando_umido",df.MinValue,df.MaxValue,df.DefaultValue,erro_sem_frac,r = 0.1,m =300)
+    
+    df = ativa_parametros("calibrando_umido")
+    ajustar_parametros_ano("../settings.xml",ini_valid,fim_valid )
+    os.system("lisflood ../settings.xml")
+    print("calibracao_feita e rodada, agora so ver os resultados filhao!")
+
+    return X,F
 
 if __name__ == "__main__":
-    reseta()
-    ajustar_parametros_ano("../settings.xml","2013-01-01","2020-12-31" )
+    
+    # temp = pd.read_csv("../tabelas/resultados/calibrar.csv",index_col = 0)
+    # temp = temp[0:8]
+    # print(temp[["ParameterName","DefaultValue"]])
+    # calibra_seco()
+    # reseta()
+    # ajustar_parametros_ano("../settings.xml","2021-01-01","2023-07-04" )
+    # ativa_parametros("calibrar")
+    # altera_um("thetar1",1)
+
+    #%%
+    calibra_umido()
+    validando("calibracao_umido_2021")
+
+    # ajustar_parametros_ano("../settings.xml","2013-01-01","2020-12-31" )
+    # df = pd.read_csv("../tabelas/resultados/calibrar.csv",index_col = 0)
+
+    # X,F = dds("calibrar",df.MinValue,df.MaxValue,df.DefaultValue,erro,r = 0.15 , m =300)
+
+
     # arquivo_xml = "../settings.xml"
     # nome ="Thetar3"
     # novo_valor = 0.179

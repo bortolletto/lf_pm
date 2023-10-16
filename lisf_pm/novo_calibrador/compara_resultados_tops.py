@@ -11,13 +11,13 @@ import pandas as pd
 import datetime 
 import os 
 data_hoje = datetime.date.today()
-start="2013-01-03 00:00:00"
-end = "2020-12-31 00:00:00"
+start="2022-01-01 00:00:00"
+end = "2022-12-31 00:00:00"
 
 # start="2013-01-03 00:00:00"
 # end = "2015-12-31 00:00:00"
 def nse(predictions, targets):
-    return (1-(np.sum((targets-predictions)**2)/np.sum((targets-np.mean(targets))**2)))
+    return (np.sum((targets-predictions)**2)/np.sum((targets-np.mean(targets))**2))
             
 # df_loc = "../exutorios_catch/out/"
 df_loc = "../catch/out/"
@@ -30,7 +30,7 @@ for i in sim["1"]:
     lista.append(float(valor))
 data = pd.date_range(start=start,end = end,freq = "D" )
 df = pd.DataFrame(index = data)
-df["ls_dis"] = lista[:-2]
+df["ls_dis"] = lista
 
 # temp = pd.read_csv("/discolocal/felipe/lisflood_pm/vazoes_observadas/results/1_9/ultimo_vazao.csv",index_col = 0)
 # df["ls_dis"] = temp["vazao_25334953_Porto Amazonas"].values
@@ -44,6 +44,14 @@ df = pd.merge(df,obs,left_index= True,right_index= True)
 
 df = df[start:end]
 # df = df[20:]
+
+import xarray as xr
+from plotly.subplots import make_subplots
+chuva = xr.open_dataset("../catch/meteo/pr.nc").to_dataframe()
+chuva =chuva.groupby("time").mean()
+chuva = chuva[start:end]
+# Imprima os resultados
+
 #%%df
 import plotly.io as pio
 #pio.renderers.default = 'svg'
@@ -53,11 +61,12 @@ pio.renderers.default = 'browser'
 nash = nse(df["ls_dis"],df["horleitura"])
 import hydroeval as he
 kge, r, alpha, beta = he.evaluator(he.kge, df["ls_dis"], df["horleitura"])
-fig = go.Figure()
+fig = make_subplots(specs = [[ { "secondary_y" : True}]])
 
-fig.add_trace(go.Scatter(x = df.index , y = df.ls_dis,name = f"simulado nash: {nash}",marker_color = "red"))
-fig.add_trace(go.Scatter(x= df.index,y=df.horleitura,name = "obs", marker_color = "black"))
-
+fig.add_trace(go.Bar(x = chuva.index , y = chuva.pr,name = "chuva",marker_color = "blue"),secondary_y=True)
+fig.add_trace(go.Scatter(x = df.index , y = df.ls_dis,name = f"simulado nash: {nash}",marker_color = "red"),secondary_y=False)
+fig.add_trace(go.Scatter(x= df.index,y=df.horleitura,name = "obs", marker_color = "black"),secondary_y=False)
+fig["layout"]["yaxis2"]["autorange"] = "reversed"
 pasta = f"../catch/out/novos_mapas/{data_hoje.day}_{data_hoje.month}"
 # pasta = f"../exutorios_catch/out/novos_mapas/{data_hoje.day}_{data_hoje.month}"
 
@@ -81,6 +90,12 @@ fig.show()
 
 #%%plotar evapo:
 
+
+# nash = nse(dados.ls_sim,dados.horleitura)
+# fig = go.Figure()
+
+# fig.add_trace(go.Scatter(x = dados.index , y = dados.ls_sim,name = f"simulado nash: {nash}",marker_color = "red"))
+# fig.add_trace(go.Scatter(x= dados.index,y=dados.horleitura,name = "obs", marker_color = "black"))
 
 
 

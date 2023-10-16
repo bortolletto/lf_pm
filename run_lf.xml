@@ -239,7 +239,7 @@ Calendar convention
 </comment>
 </textvar>
 
-<textvar name="CalendarDayStart" value="01/01/2013 00:00">
+<textvar name="CalendarDayStart" value="2021-01-01 00:00">
 <comment>
 Reference day and time
 </comment>
@@ -260,13 +260,13 @@ Within the model,the smallest out of DtSecChannel and DtSec is used
 </comment>
 </textvar>
 
-<textvar name="StepStart" value="01/01/2013 00:00">
+<textvar name="StepStart" value="2021-01-01 00:00">
 <comment>
 Number of first time step in simulation
 </comment>
 </textvar>
 
-<textvar name="StepEnd" value="07/04/2023 00:00">
+<textvar name="StepEnd" value="2023-07-04 00:00">
 <comment>
 Number of last time step in simulation
 </comment>
@@ -590,7 +590,7 @@ INITIAL CONDITIONS
 **************************************************************
 </comment>
 
-<textvar name="timestepInit" value="01/01/2013 00:00">
+<textvar name="timestepInit" value="2021-01-01 00:00">
 <comment>
 if init. condition are stored as netCDF with different time steps
 this variable indicates which time step to use
@@ -1652,7 +1652,7 @@ Calendar convention
 </comment>
 </textvar>
 
-<textvar name="CalendarDayStart" value="$(CalendarDayStart)">
+<textvar name="CalendarDayStart" value="2021-01-01 00:00">
 <comment>
 Calendar day is back!
 Calendar day number of 1st day in model run
@@ -1674,13 +1674,13 @@ Within the model,the smallest out of DtSecChannel and DtSec is used
 </comment>
 </textvar>
 
-<textvar name="StepStart" value="$(StepStart)">
+<textvar name="StepStart" value="2021-01-01 00:00">
 <comment>
 Number of first time step in simulation
 </comment>
 </textvar>
 
-<textvar name="StepEnd" value="$(StepEnd)">
+<textvar name="StepEnd" value="2023-07-04 00:00">
 <comment>
 Number of last time step in simulation
 </comment>
@@ -2129,7 +2129,7 @@ Average discharge map [m3/s]
 </comment>
 </textvar>
 
-<textvar name="timestepInit" value="$(timestepInit)">
+<textvar name="timestepInit" value="2021-01-01 00:00">
 <comment>
 if init condition are stored as netCDF with different time steps
 this variable indicates which time step to use
