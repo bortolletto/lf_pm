@@ -1,0 +1,16 @@
+,ParameterName,MinValue,MaxValue,DefaultValue,tipo
+0,UpperZoneTimeConstant,0.01,40.0,10.202913014343377,xml
+1,LowerZoneTimeConstant,40.0,1000.0,100.321454453177,xml
+2,GwPercValue,0.01,5,0.0100084943319319,xml
+7,CalChanMan,0.5,5,1.999925001258754,xml
+8,GwLoss,0.0,0.5,0.0,xml
+9,thetar1,0.0,1.0,0.179,xml
+10,thetar2,0.0,0.6,0.179,xml
+11,thetar3,0.0,1.0,0.179,xml
+12,fracirrigated,0.0,1.0,0.4964,landuse
+13,fracforest,0.0,1.0,0.4964,landuse
+14,fracrice,0.0,1.0,0.4964,landuse
+15,fracother,0.0,1.0,0.4964,landuse
+16,fracsealed,0.0,1.0,0.4964,landuse
+17,fracwater,0.0,1.0,0.4964,landuse
+

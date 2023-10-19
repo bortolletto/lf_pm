@@ -1,0 +1,9 @@
+,ParameterName,MinValue,MaxValue,DefaultValue,tipo
+0,UpperZoneTimeConstant,0.01,40.0,10.336135932597717,xml
+1,LowerZoneTimeConstant,40.0,1000.0,75.05215317021381,xml
+2,GwPercValue,0.01,5.0,1.7702300158995938,xml
+7,CalChanMan,0.5,5.0,4.998998419651873,xml
+8,GwLoss,0.0,0.5,0.4998696458620985,xml
+9,thetar1,0.0,1.0,0.16934935681393204,xml
+10,thetar2,0.0,0.6,0.19963799856892572,xml
+11,thetar3,0.0,1.0,0.38976435567969214,xml

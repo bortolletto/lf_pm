@@ -1,0 +1,9 @@
+,ParameterName,MinValue,MaxValue,DefaultValue,tipo
+0,UpperZoneTimeConstant,3,40.0,15,xml
+1,LowerZoneTimeConstant,50.0,2500.0,1000,xml
+2,GwPercValue,0.5,2.0,0.5,xml
+3,b_Xinanjiang,0.01,1,0.6,xml
+4,PowerPrefFlow,0.5,8.0,3.5,xml
+5,CalChanMan,0.1,15,1.5,xml
+6,CalChanMan2,0.1,1.5,3,xml
+
